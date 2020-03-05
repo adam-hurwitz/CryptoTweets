@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/feedFragment"
-        android:name="app.cryptotweets.FeedFragment"
+        android:name="app.cryptotweets.feed.FeedFragment"
         android:label="fragment_feed"
         tools:layout="@layout/fragment_feed" />
 </navigation>

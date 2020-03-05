@@ -4,8 +4,12 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
+import app.cryptotweets.feed.FeedRepository
 
-class FeedViewModelFactory(owner: SavedStateRegistryOwner) : AbstractSavedStateViewModelFactory(
+class FeedViewModelFactory(
+    owner: SavedStateRegistryOwner,
+    private val feedRepository: FeedRepository
+) : AbstractSavedStateViewModelFactory(
     owner,
     null
 ) {
@@ -13,6 +17,6 @@ class FeedViewModelFactory(owner: SavedStateRegistryOwner) : AbstractSavedStateV
         key: String,
         modelClass: Class<T>,
         handle: SavedStateHandle
-    ) = FeedViewModel(savedStateHandle = handle) as T
+    ) = FeedViewModel(savedStateHandle = handle, feedRepository = feedRepository) as T
 
 }
