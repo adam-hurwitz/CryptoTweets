@@ -1,4 +1,4 @@
-package app.cryptotweets.viewmodel
+package app.cryptotweets.feed.viewmodel
 
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
@@ -9,14 +9,10 @@ import app.cryptotweets.feed.FeedRepository
 class FeedViewModelFactory(
     owner: SavedStateRegistryOwner,
     private val feedRepository: FeedRepository
-) : AbstractSavedStateViewModelFactory(
-    owner,
-    null
-) {
+) : AbstractSavedStateViewModelFactory(owner, null) {
     override fun <T : ViewModel?> create(
         key: String,
         modelClass: Class<T>,
         handle: SavedStateHandle
     ) = FeedViewModel(savedStateHandle = handle, feedRepository = feedRepository) as T
-
 }

@@ -1,7 +1,15 @@
 package app.cryptotweets.feed.models
 
-data class Tweet(val created_at: String, val id: Long, val text: String, val user: User)
+import java.security.Timestamp
+
+data class Tweet(
+    val created_at: String,
+    val id: Long,
+    val text: String,
+    val user: User)
 //TODO
+// Tweet Array
+//  created_at Timestamp
 // entities Obj > media Array
 //  url String
 //  media_url String

@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import app.cryptotweets.App
 import app.cryptotweets.R
-import app.cryptotweets.viewmodel.FeedViewModel
-import app.cryptotweets.viewmodel.FeedViewModelFactory
+import app.cryptotweets.feed.viewmodel.FeedViewModel
+import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
 import javax.inject.Inject
 
 class FeedFragment : Fragment() {
@@ -31,6 +31,7 @@ class FeedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewModel
         return inflater.inflate(R.layout.fragment_feed, container, false)
     }
 
