@@ -5,17 +5,23 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cryptotweets.feed.FeedRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FeedViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val feedRepository: FeedRepository
 ) : ViewModel() {
     init {
-        //TODO: Launching Coroutine on IO thread, calling suspend function, and returning data on Main thread
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val results = feedRepository.getTweets()
-            Log.v("ViewModel", "Results: " + results)
+            withContext(Dispatchers.Main) {
+                //TODO: Populate view state.
+                results.map {
+                    Log.v(FeedViewModel::class.java.simpleName, "Tweet: " + it)
+                }
+            }
         }
     }
 }
