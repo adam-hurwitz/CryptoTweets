@@ -12,6 +12,6 @@ data class Tweet(
     @PrimaryKey @ColumnInfo(name = "tweet_id") val id: Long,
     @ColumnInfo(name = "created_at") val created_at: String,
     val text: String,
-    @Embedded val user: User/*,
-    @Embedded val entities: Entities*/ //FIXME
+    @Embedded val user: User,
+    @Embedded val entities: Entities
 )
