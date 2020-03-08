@@ -1,9 +1,13 @@
 package app.cryptotweets.dependencyInjection
 
+import android.app.Application
+import androidx.room.Room
 import app.cryptotweets.Utils.AUTHORIZATION_KEY
 import app.cryptotweets.Utils.BASE_URL
+import app.cryptotweets.Utils.CRYPTOTWEETS_DATABASE_NAME
 import app.cryptotweets.auth
 import app.cryptotweets.feed.FeedService
+import app.cryptotweets.feed.room.FeedDatabase
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
@@ -14,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class UtilsModule {
+class UtilsModule(private val app: Application) {
 
     @Singleton
     @Provides
@@ -39,4 +43,12 @@ class UtilsModule {
     @Singleton
     @Provides
     fun providesFeedService() = providesRetrofit().create(FeedService::class.java)
+
+    @Singleton
+    @Provides
+    fun providesFeedDatabase() = Room.databaseBuilder(
+        app,
+        FeedDatabase::class.java,
+        CRYPTOTWEETS_DATABASE_NAME
+    ).build()
 }
