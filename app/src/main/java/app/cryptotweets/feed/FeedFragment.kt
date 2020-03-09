@@ -11,6 +11,7 @@ import app.cryptotweets.App
 import app.cryptotweets.R
 import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
+import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
 class FeedFragment : Fragment() {

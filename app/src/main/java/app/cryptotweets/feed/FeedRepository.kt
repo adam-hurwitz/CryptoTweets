@@ -7,6 +7,8 @@ import app.cryptotweets.Utils.Resource.Companion.error
 import app.cryptotweets.Utils.Resource.Companion.loading
 import app.cryptotweets.Utils.Resource.Companion.success
 import app.cryptotweets.feed.room.FeedDao
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -17,16 +19,16 @@ class FeedRepository @Inject constructor(
     private val feedDao: FeedDao
 ) {
 
-    suspend fun getTweets() = flow {
+    suspend fun getFeed() = flow {
         emit(loading(null))
         try {
-            val tweets = feedService.getTweets(
+            val tweetsResponse = feedService.getTweets(
                 listType = FEED_LIST_TYPE,
                 listId = FEED_LIST_ID,
                 count = FEED_LIST_COUNT
             )
-            feedDao.insertAll(tweets)
-            emit(success(feedDao.getAll()))
+            feedDao.insertAll(tweetsResponse)
+            feedDao.getAll().collect { results -> emit(success(results)) }
         } catch (exception: Exception) {
             emit(error(exception.localizedMessage, null))
         }

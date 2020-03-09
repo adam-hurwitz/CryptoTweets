@@ -19,7 +19,7 @@ class FeedViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            feedRepository.getTweets().collect { results ->
+            feedRepository.getFeed().collect { results ->
                 when (results.status) {
                     LOADING -> Log.v(LOG, "Loading") //TODO: Show progressBar.
                     SUCCESS -> withContext(Dispatchers.Main) {
