@@ -28,7 +28,7 @@ class FeedViewModel(
                             Log.v(LOG, "Tweet: " + it)
                         }
                     }
-                    ERROR -> Log.e(LOG, "Error") //TODO: Show snackbar.
+                    ERROR -> Log.e(LOG, "Error + ${results.message}") //TODO: Show snackbar.
                 }
             }
         }

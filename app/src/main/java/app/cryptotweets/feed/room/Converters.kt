@@ -11,22 +11,12 @@ class Converters {
     fun toUrlsString(value: List<Urls>) = Gson().toJson(value)
 
     @TypeConverter
-    fun toUrlsList(value: String) =
-        (Gson().fromJson(value, Array<Urls>::class.java)).toList()
-
-    //TODO: Create StackOverflow for generic @TypeConverter
-    /*@TypeConverter
-    fun <T> toUrlsString(value: List<T>) = Gson().toJson(value)
+    fun toUrlsList(value: String) = Gson().fromJson(value, Array<Urls>::class.java).toList()
 
     @TypeConverter
-    fun <T> toUrlsList(value: String): List<T> =
-        (Gson().fromJson(value, Array<T>::class.java)).toList()*/
+    fun toMediaString(value: List<Media>?) = Gson().toJson(value)
 
     @TypeConverter
-    fun toMediaString(value: List<Media>) = Gson().toJson(value)
-
-    @TypeConverter
-    fun toMediaList(value: String) =
-        (Gson().fromJson(value, Array<Media>::class.java)).toList()
+    fun toMediaList(value: String) = Gson().fromJson(value, Array<Media>::class.java)?.toList()
 
 }
