@@ -6,16 +6,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cryptotweets.Utils.Status.*
 import app.cryptotweets.feed.FeedRepository
+import app.cryptotweets.feed.FeedViewState
+import app.cryptotweets.feed._FeedViewState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@ExperimentalCoroutinesApi
 class FeedViewModel(
     private val savedStateHandle: SavedStateHandle,
     private val feedRepository: FeedRepository
 ) : ViewModel() {
     val LOG = FeedViewModel::class.java.simpleName
+
+    private val _feedViewState = _FeedViewState()
+    val feedViewState = FeedViewState(_feedViewState)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -23,10 +33,7 @@ class FeedViewModel(
                 when (results.status) {
                     LOADING -> Log.v(LOG, "Loading") //TODO: Show progressBar.
                     SUCCESS -> withContext(Dispatchers.Main) {
-                        //TODO: Populate view state.
-                        results.data?.map {
-                            Log.v(LOG, "Tweet: " + it)
-                        }
+                        _feedViewState._feed.value = results.data
                     }
                     ERROR -> Log.e(LOG, "Error + ${results.message}") //TODO: Show snackbar.
                 }
@@ -34,3 +41,5 @@ class FeedViewModel(
         }
     }
 }
+
+
