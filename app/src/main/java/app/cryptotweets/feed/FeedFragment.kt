@@ -37,6 +37,7 @@ class FeedFragment : Fragment() {
         (context.applicationContext as App).appComponent.inject(this)
     }
 
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

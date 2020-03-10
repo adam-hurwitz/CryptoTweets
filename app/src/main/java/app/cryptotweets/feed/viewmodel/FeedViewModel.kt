@@ -27,17 +27,13 @@ class FeedViewModel(
 
     init {
         feedRepository.getFeed().onEach { results ->
-                when (results.status) {
-                    LOADING -> Log.v(LOG, "Loading") //TODO: Show progressBar.
-                    SUCCESS -> withContext(Dispatchers.Main) {
-                        _feedViewState._feed.value = results.data
-                    }
-                    ERROR -> Log.e(LOG, "Error + ${results.message}") //TODO: Show snackbar.
+            when (results.status) {
+                LOADING -> Log.v(LOG, "Loading") //TODO: Show progressBar.
+                SUCCESS -> withContext(Dispatchers.Main) {
+                    _feedViewState._feed.value = results.data
                 }
+                ERROR -> Log.e(LOG, "Error + ${results.message}") //TODO: Show snackbar.
             }
-            .flowOn(Dispatchers.IO)
-            .launchIn(viewModelScope)
+        }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
     }
 }
-
-

@@ -30,7 +30,7 @@ class FeedRepository @Inject constructor(
             feedDao.insertAll(tweetsResponse)
             feedDao.getAll().collect { results -> emit(success(results)) }
         } catch (exception: Exception) {
-            emit(error(exception.localizedMessage, null))
+            emit(error(exception.localizedMessage!!, null))
         }
     }
 
