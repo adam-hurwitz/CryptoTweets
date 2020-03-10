@@ -19,7 +19,7 @@ class FeedRepository @Inject constructor(
     private val feedDao: FeedDao
 ) {
 
-    suspend fun getFeed() = flow {
+    fun getFeed() = flow {
         emit(loading(null))
         try {
             val tweetsResponse = feedService.getTweets(

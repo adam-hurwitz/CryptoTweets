@@ -10,11 +10,9 @@ import app.cryptotweets.feed.FeedViewState
 import app.cryptotweets.feed._FeedViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @ExperimentalCoroutinesApi
@@ -28,8 +26,7 @@ class FeedViewModel(
     val feedViewState = FeedViewState(_feedViewState)
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            feedRepository.getFeed().collect { results ->
+        feedRepository.getFeed().onEach { results ->
                 when (results.status) {
                     LOADING -> Log.v(LOG, "Loading") //TODO: Show progressBar.
                     SUCCESS -> withContext(Dispatchers.Main) {
@@ -38,7 +35,8 @@ class FeedViewModel(
                     ERROR -> Log.e(LOG, "Error + ${results.message}") //TODO: Show snackbar.
                 }
             }
-        }
+            .flowOn(Dispatchers.IO)
+            .launchIn(viewModelScope)
     }
 }
 
