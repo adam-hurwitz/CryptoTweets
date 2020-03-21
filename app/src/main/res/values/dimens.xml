@@ -28,6 +28,6 @@
     <dimen name="text_size_title">22sp</dimen>
 
     <!--Feed-->
-    <dimen name="tweet_cell_height">120dp</dimen>
+    <dimen name="tweet_cell_elevation">8dp</dimen>
 
 </resources>

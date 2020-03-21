@@ -51,7 +51,6 @@ class FeedFragment : Fragment() {
     private fun initAdapters() {
         adapter = FeedAdapter()
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.setHasFixedSize(true)
         recyclerView.adapter = adapter
     }
 
