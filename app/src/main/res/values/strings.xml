@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">CryptoTweets</string>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="screen_name_at">\@%s</string>
 </resources>

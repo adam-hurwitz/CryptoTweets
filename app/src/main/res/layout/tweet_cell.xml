@@ -1,24 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="tweet"
+            type="app.cryptotweets.feed.models.Tweet" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="88dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="16dp">
+        android:layout_height="@dimen/tweet_cell_height"
+        android:paddingLeft="@dimen/padding_small"
+        android:paddingTop="@dimen/padding_medium"
+        android:paddingRight="@dimen/padding_small"
+        android:paddingBottom="@dimen/padding_medium">
+
+        <TextView
+            android:id="@+id/screenName"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text='@{String.format(@string/screen_name_at, tweet.user.screen_name)}'
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="\@screenName" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".25" />
 
         <TextView
             android:id="@+id/tweetText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sample tweet"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@{tweet.text}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/guideline"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/screenName"
+            tools:text="Tweet text here." />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

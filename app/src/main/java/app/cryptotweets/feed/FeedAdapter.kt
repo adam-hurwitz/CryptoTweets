@@ -28,7 +28,7 @@ class FeedAdapter : PagedListAdapter<Tweet, FeedAdapter.FeedViewHolder>(DIFF_UTI
                 tweet: Tweet,
                 onClickListener: View.OnClickListener
             ) {*/
-            binding.tweetText.text = tweet.text
+            binding.tweet = tweet
         }
     }
 
