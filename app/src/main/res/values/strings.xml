@@ -2,4 +2,6 @@
     <string name="app_name">CryptoTweets</string>
     <string name="screen_name_at">\@%s</string>
     <string name="user_image_content_description">User image</string>
+    <string name="twitter_date_time_format">EEE MMM dd HH:mm:ss ZZZZZ yyyy</string>
+    <string name="cryptotweets_date_time_format">h:mm a MMM d</string>
 </resources>

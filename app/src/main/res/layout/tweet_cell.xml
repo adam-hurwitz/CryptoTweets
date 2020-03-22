@@ -34,11 +34,11 @@
                 android:layout_height="@dimen/user_image_height"
                 android:contentDescription="@string/user_image_content_description"
                 android:paddingEnd="@dimen/padding_small"
+                app:imageUrl="@{tweet.user.profile_image_url_https}"
                 app:layout_constraintBottom_toTopOf="@id/tweetText"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/screenName"
                 app:layout_constraintTop_toTopOf="parent"
-                app:imageUrl="@{tweet.user.profile_image_url_https}"
                 tools:layout_constraintBottom_toTopOf="@id/tweetText"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -78,6 +78,16 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tweetText"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="@{tweet.created_at}"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:timestamp="@{tweet.created_at}"
+                tools:text="January, 1, 1999" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
