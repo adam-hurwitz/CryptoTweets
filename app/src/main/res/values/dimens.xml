@@ -29,5 +29,7 @@
 
     <!--Feed-->
     <dimen name="tweet_cell_elevation">8dp</dimen>
+    <dimen name="user_image_height">48dp</dimen>
+    <dimen name="media_image_height">128dp</dimen>
 
 </resources>

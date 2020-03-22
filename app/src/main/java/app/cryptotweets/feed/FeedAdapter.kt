@@ -29,6 +29,7 @@ class FeedAdapter : PagedListAdapter<Tweet, FeedAdapter.FeedViewHolder>(DIFF_UTI
                 onClickListener: View.OnClickListener
             ) {*/
             binding.tweet = tweet
+            binding.executePendingBindings()
         }
     }
 

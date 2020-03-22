@@ -14,3 +14,6 @@ val FEED_LIST_COUNT = "100"
 const val LIST_TYPE_PATH = "listType"
 const val LIST_ID_QUERY = "list_id"
 const val LIST_COUNT_QUERY = "count"
+
+//Feed
+const val MEDIA_RADIUS_INT = 112

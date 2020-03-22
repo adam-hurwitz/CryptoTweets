@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="tweet"
             type="app.cryptotweets.feed.models.Tweet" />
@@ -26,39 +28,56 @@
             android:paddingRight="@dimen/padding_small"
             android:paddingBottom="@dimen/padding_medium">
 
-            <!--TODO: Implement-->
-            <!--<ImageView
+            <ImageView
                 android:id="@+id/userImage"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/user_image_height"
                 android:contentDescription="@string/user_image_content_description"
-                app:imageUrl="@{tweet.user.profile_image_url}"
+                android:paddingEnd="@dimen/padding_small"
                 app:layout_constraintBottom_toTopOf="@id/tweetText"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/screenName"
                 app:layout_constraintTop_toTopOf="parent"
+                app:imageUrl="@{tweet.user.profile_image_url_https}"
                 tools:layout_constraintBottom_toTopOf="@id/tweetText"
-                tools:srcCompat="@tools:sample/avatars" />-->
+                tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
                 android:id="@+id/screenName"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
+                android:gravity="center"
                 android:text='@{String.format(@string/screen_name_at, tweet.user.screen_name)}'
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/userImage"
+                app:layout_constraintLeft_toRightOf="@id/userImage"
+                app:layout_constraintTop_toTopOf="@id/userImage"
                 tools:text="\@screenName" />
 
             <TextView
                 android:id="@+id/tweetText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:paddingTop="@dimen/padding_small"
                 android:text="@{tweet.text}"
+                app:layout_constraintBottom_toTopOf="@id/mediaImage"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/userImage"
+                tools:text="Tweet text here." />
+
+            <ImageView
+                android:id="@+id/mediaImage"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/media_image_height"
+                android:layout_marginTop="@dimen/margin_small"
+                android:visibility="@{tweet.entities.media.get(0).media_url_https != null ? View.VISIBLE : View.GONE}"
+                app:imageUrl="@{tweet.entities.media.get(0).media_url_https}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/screenName"
-                tools:text="Tweet text here." />
+                app:layout_constraintTop_toBottomOf="@id/tweetText"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
