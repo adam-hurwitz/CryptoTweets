@@ -13,7 +13,6 @@ val DIFF_UTIL = object : DiffUtil.ItemCallback<Tweet>() {
     override fun areItemsTheSame(oldItem: Tweet, newItem: Tweet) = oldItem.id == newItem.id
 
     override fun areContentsTheSame(oldItem: Tweet, newItem: Tweet) = oldItem == newItem
-
 }
 
 class FeedAdapter : PagedListAdapter<Tweet, FeedAdapter.FeedViewHolder>(DIFF_UTIL) {

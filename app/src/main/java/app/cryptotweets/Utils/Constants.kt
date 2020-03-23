@@ -8,7 +8,10 @@ val CRYPTOTWEETS_DATABASE_NAME = "cryptoTweetsDatabase"
 val BASE_URL = "https://api.twitter.com/1.1/"
 val FEED_LIST_TYPE = "statuses.json"
 val FEED_LIST_ID = "1173707664863350785"
-val FEED_LIST_SIZE = "100"
+val FEED_LIST_SIZE = "20"
+
+//TODO: Refactor
+//val FEED_LIST_SIZE = "100"
 val FEED_PAGE_SIZE = 10
 
 //FeedService

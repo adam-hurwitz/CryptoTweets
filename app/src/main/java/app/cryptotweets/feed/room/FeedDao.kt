@@ -14,4 +14,8 @@ interface FeedDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(tweets: List<Tweet>?)
+
+    //TODO: Refactor naming
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun appendAll(tweets: List<Tweet>?)
 }

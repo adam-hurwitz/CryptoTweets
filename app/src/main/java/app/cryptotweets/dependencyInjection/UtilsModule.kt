@@ -6,7 +6,7 @@ import app.cryptotweets.Utils.AUTHORIZATION_KEY
 import app.cryptotweets.Utils.BASE_URL
 import app.cryptotweets.Utils.CRYPTOTWEETS_DATABASE_NAME
 import app.cryptotweets.auth
-import app.cryptotweets.feed.FeedService
+import app.cryptotweets.feed.network.FeedService
 import app.cryptotweets.feed.room.FeedDatabase
 import dagger.Module
 import dagger.Provides

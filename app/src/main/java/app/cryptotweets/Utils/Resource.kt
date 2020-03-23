@@ -16,7 +16,8 @@
 
 package app.cryptotweets.Utils
 
-import app.cryptotweets.Utils.Status.*
+import app.cryptotweets.Utils.Status.ERROR
+import app.cryptotweets.Utils.Status.SUCCESS
 
 /**
  * A generic class that holds a value with its loading status.
@@ -24,8 +25,8 @@ import app.cryptotweets.Utils.Status.*
 </T> */
 data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
     companion object {
+        fun <T> loading(data: T?) = Resource(Status.LOADING, data, null)
         fun <T> success(data: T?) = Resource(SUCCESS, data, null)
         fun <T> error(msg: String, data: T?) = Resource(ERROR, data, msg)
-        fun <T> loading(data: T?) = Resource(LOADING, data, null)
     }
 }
