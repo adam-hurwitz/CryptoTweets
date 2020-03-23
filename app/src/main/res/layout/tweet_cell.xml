@@ -23,10 +23,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="@dimen/padding_small"
-            android:paddingTop="@dimen/padding_medium"
-            android:paddingRight="@dimen/padding_small"
-            android:paddingBottom="@dimen/padding_medium">
+            android:padding="@dimen/padding_medium">
 
             <ImageView
                 android:id="@+id/userImage"
@@ -71,6 +68,7 @@
                 android:layout_width="0dp"
                 android:layout_height="@dimen/media_image_height"
                 android:layout_marginTop="@dimen/margin_small"
+                android:contentDescription="@string/media_image_content_description"
                 android:visibility="@{tweet.entities.media.get(0).media_url_https != null ? View.VISIBLE : View.GONE}"
                 app:imageUrl="@{tweet.entities.media.get(0).media_url_https}"
                 app:layout_constraintBottom_toBottomOf="parent"
