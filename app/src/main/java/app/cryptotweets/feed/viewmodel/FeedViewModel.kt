@@ -28,7 +28,7 @@ class FeedViewModel(
     val feedViewState = FeedViewState(_feedViewState)
 
     init {
-        feedRepository.getFeed(this).onEach { results ->
+        feedRepository.initFeed(this).onEach { results ->
             when (results.status) {
                 LOADING -> {
                     //TODO: If results.data == BoundaryItem, call more data.
@@ -45,7 +45,7 @@ class FeedViewModel(
 
     @InternalCoroutinesApi
     override fun onItemEndLoaded() {
-        feedRepository.getFeed2().onEach { results ->
+        feedRepository.loadMoreFeed().onEach { results ->
             println("BDC ViewModel")
         }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
     }

@@ -1,10 +1,12 @@
 package app.cryptotweets.dependencyInjection
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import app.cryptotweets.Utils.AUTHORIZATION_KEY
 import app.cryptotweets.Utils.BASE_URL
 import app.cryptotweets.Utils.CRYPTOTWEETS_DATABASE_NAME
+import app.cryptotweets.Utils.CRYPTOTWEETS_SHARED_PREF
 import app.cryptotweets.auth
 import app.cryptotweets.feed.network.FeedService
 import app.cryptotweets.feed.room.FeedDatabase
@@ -19,6 +21,11 @@ import javax.inject.Singleton
 
 @Module
 class UtilsModule(private val app: Application) {
+
+    @Singleton
+    @Provides
+    fun providesSharedPreferences() =
+        app.getSharedPreferences(CRYPTOTWEETS_SHARED_PREF, Context.MODE_PRIVATE)
 
     @Singleton
     @Provides

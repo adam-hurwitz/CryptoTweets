@@ -12,10 +12,6 @@ interface FeedDao {
     @Query("SELECT * FROM feed ORDER BY created_at DESC")
     fun getAll(): DataSource.Factory<Int, Tweet>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(tweets: List<Tweet>?)
-
-    //TODO: Refactor naming
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun appendAll(tweets: List<Tweet>?)
+    suspend fun insertAll(tweets: List<Tweet>?)
 }

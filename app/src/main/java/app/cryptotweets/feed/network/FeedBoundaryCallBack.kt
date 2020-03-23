@@ -8,8 +8,7 @@ class FeedBoundaryCallBack(val feedRepoCallback: FeedRepoCallback) :
     PagedList.BoundaryCallback<Tweet>() {
     override fun onItemAtEndLoaded(itemAtEnd: Tweet) {
         super.onItemAtEndLoaded(itemAtEnd)
+        println("BDC FeedBoundaryCallback ${itemAtEnd}")
         feedRepoCallback.onItemEndLoaded()
-        println("BDC")
     }
-
 }

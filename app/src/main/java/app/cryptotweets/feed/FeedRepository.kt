@@ -1,11 +1,9 @@
 package app.cryptotweets.feed
 
+import android.content.SharedPreferences
 import androidx.lifecycle.asFlow
 import androidx.paging.toLiveData
-import app.cryptotweets.Utils.FEED_LIST_ID
-import app.cryptotweets.Utils.FEED_LIST_SIZE
-import app.cryptotweets.Utils.FEED_LIST_TYPE
-import app.cryptotweets.Utils.FEED_PAGE_SIZE
+import app.cryptotweets.Utils.*
 import app.cryptotweets.Utils.Resource.Companion.error
 import app.cryptotweets.Utils.Resource.Companion.loading
 import app.cryptotweets.Utils.Resource.Companion.success
@@ -19,23 +17,28 @@ import javax.inject.Singleton
 
 @Singleton
 class FeedRepository @Inject constructor(
-    private val feedService: FeedService,
-    private val feedDao: FeedDao
+    private val sharedPreferences: SharedPreferences,
+    private val dao: FeedDao,
+    private val service: FeedService
 ) {
-    fun getFeed(feedRepoCallback: FeedRepoCallback) = flow {
+    fun initFeed(feedRepoCallback: FeedRepoCallback) = flow {
         emit(loading(null))
         try {
-            val tweetsResponse = feedService.getTweets(
+            sharedPreferences.edit()
+                .putInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT).apply()
+            val tweetsResponse = service.getTweets(
                 listType = FEED_LIST_TYPE,
                 listId = FEED_LIST_ID,
-                count = FEED_LIST_SIZE
+                count = FEED_LIST_SIZE,
+                page = sharedPreferences
+                    .getInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT).toString()
             )
-            feedDao.insertAll(tweetsResponse)
-            feedDao.getAll().toLiveData(
-                pageSize = FEED_PAGE_SIZE,
-                //TODO: Experiment
-                // Passing in CoroutineScope 'coroutineScope { this }'
-                // emit to Loading in ViewModel, pass in FlowCollector 'this'
+            dao.insertAll(tweetsResponse)
+            dao.getAll().toLiveData(
+                pageSize = FEED_PAGEDLIST_SIZE,
+                // TODO: Experiment
+                //  Passing in CoroutineScope 'coroutineScope { this }'
+                //  emit to Loading in ViewModel, pass in FlowCollector 'this'
                 boundaryCallback = FeedBoundaryCallBack(feedRepoCallback)
             ).asFlow().collect { results ->
                 emit(success(results))
@@ -45,25 +48,27 @@ class FeedRepository @Inject constructor(
         }
     }
 
-    fun getFeed2() = flow {
+    fun loadMoreFeed() = flow {
         emit(loading(null))
+        var page = sharedPreferences.getInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT)
+        page++
+        sharedPreferences.edit().putInt(FEED_LIST_PAGE_NUM_KEY, page).apply()
         try {
-            val tweetsResponse = feedService.getTweets2(
+            val tweetsResponse = service.getTweets(
                 listType = FEED_LIST_TYPE,
                 listId = FEED_LIST_ID,
                 count = FEED_LIST_SIZE,
-                //TODO: Manage current page with SharedPreferences
-                page = "2"
+                page = page.toString()
             )
-            feedDao.appendAll(tweetsResponse)
-            println("BDC Repo")
+            if (tweetsResponse.isNotEmpty())
+                dao.insertAll(tweetsResponse)
         } catch (exception: Exception) {
             emit(error(exception.localizedMessage!!, null))
         }
     }
 }
 
-//TODO: Refactor
+// TODO: Refactor
 interface FeedRepoCallback {
     fun onItemEndLoaded()
 }

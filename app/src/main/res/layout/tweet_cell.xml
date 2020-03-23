@@ -83,7 +83,6 @@
                 android:id="@+id/timestamp"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:text="@{tweet.created_at}"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:timestamp="@{tweet.created_at}"

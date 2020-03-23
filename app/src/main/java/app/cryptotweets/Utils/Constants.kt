@@ -1,23 +1,25 @@
 package app.cryptotweets.Utils
 
-val AUTHORIZATION_KEY = "Authorization"
+const val AUTHORIZATION_KEY = "Authorization"
+const val CRYPTOTWEETS_DATABASE_NAME = "cryptoTweetsDatabase"
 
-val CRYPTOTWEETS_DATABASE_NAME = "cryptoTweetsDatabase"
+// SharedPreferences
+const val CRYPTOTWEETS_SHARED_PREF = "CryptoTweetsSharedPreferences"
+const val FEED_LIST_PAGE_NUM_KEY = "feedListPageNumKey"
+const val FEED_LIST_PAGE_NUM_DEFAULT = 1
 
-//FeedRepository
-val BASE_URL = "https://api.twitter.com/1.1/"
-val FEED_LIST_TYPE = "statuses.json"
-val FEED_LIST_ID = "1173707664863350785"
-val FEED_LIST_SIZE = "20"
+// FeedRepository
+const val BASE_URL = "https://api.twitter.com/1.1/"
+const val FEED_LIST_TYPE = "statuses.json"
+const val FEED_LIST_ID = "1173707664863350785"
+const val FEED_LIST_SIZE = "100"
 
-//TODO: Refactor
-//val FEED_LIST_SIZE = "100"
-val FEED_PAGE_SIZE = 10
-
-//FeedService
+// FeedService
 const val LIST_TYPE_PATH = "listType"
 const val LIST_ID_QUERY = "list_id"
 const val LIST_COUNT_QUERY = "count"
+const val LIST_PAGE_NUM_QUERY = "page"
 
-//Feed
+// Feed PagedList
+const val FEED_PAGEDLIST_SIZE = 18
 const val MEDIA_RADIUS_INT = 112
