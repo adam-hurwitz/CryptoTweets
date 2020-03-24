@@ -1,5 +1,6 @@
 package app.cryptotweets.feed.network
 
-interface RepoLoadMoreCallback {
+interface RepositoryLoadingCallback {
+    fun onZeroItemsLoaded()
     fun onItemEndLoaded()
 }

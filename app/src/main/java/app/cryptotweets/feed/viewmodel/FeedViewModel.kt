@@ -7,7 +7,7 @@ import app.cryptotweets.Utils.Status.*
 import app.cryptotweets.feed.FeedRepository
 import app.cryptotweets.feed.FeedViewState
 import app.cryptotweets.feed._FeedViewState
-import app.cryptotweets.feed.network.RepoLoadMoreCallback
+import app.cryptotweets.feed.network.RepositoryLoadingCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOn
@@ -18,14 +18,18 @@ import kotlinx.coroutines.withContext
 @ExperimentalCoroutinesApi
 class FeedViewModel(
     private val feedRepository: FeedRepository
-) : ViewModel(), RepoLoadMoreCallback {
+) : ViewModel(), RepositoryLoadingCallback {
     val LOG = FeedViewModel::class.java.simpleName
 
     private val _feedViewState = _FeedViewState()
     val feedViewState = FeedViewState(_feedViewState)
 
     init {
-        feedRepository.initFeed(this).onEach { results ->
+        initFeed(true)
+    }
+
+    private fun initFeed(toRetry: Boolean) {
+        feedRepository.initFeed(this, toRetry).onEach { results ->
             when (results.status) {
                 LOADING -> {
                     // TODO: Show progressBar.
@@ -37,6 +41,10 @@ class FeedViewModel(
                 ERROR -> Log.e(LOG, "Error + ${results.message}") // TODO: Show snackbar.
             }
         }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
+    }
+
+    override fun onZeroItemsLoaded() {
+        initFeed(false)
     }
 
     override fun onItemEndLoaded() {
