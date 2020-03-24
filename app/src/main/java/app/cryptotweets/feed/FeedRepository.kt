@@ -7,6 +7,7 @@ import app.cryptotweets.Utils.*
 import app.cryptotweets.Utils.Resource.Companion.error
 import app.cryptotweets.Utils.Resource.Companion.loading
 import app.cryptotweets.Utils.Resource.Companion.success
+import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.feed.network.FeedService
 import app.cryptotweets.feed.network.PagedListBoundaryCallBack
 import app.cryptotweets.feed.network.RepoLoadMoreCallback
@@ -24,22 +25,14 @@ class FeedRepository @Inject constructor(
 ) {
     fun initFeed(repoLoadMoreCallback: RepoLoadMoreCallback) = flow {
         emit(loading(null))
+        // Page number reset when new data request is made.
+        sharedPreferences.edit().putInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT).apply()
+        val page = sharedPreferences.getInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT)
         try {
-            sharedPreferences.edit()
-                .putInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT).apply()
-            val tweetsResponse = service.getTweets(
-                listType = FEED_LIST_TYPE,
-                listId = FEED_LIST_ID,
-                count = FEED_LIST_SIZE,
-                page = sharedPreferences
-                    .getInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT).toString()
-            )
+            val tweetsResponse = getTweets(page)
             dao.insertAll(tweetsResponse)
             dao.getAll().toLiveData(
                 pageSize = FEED_PAGEDLIST_SIZE,
-                // TODO: Experiment
-                //  Passing in CoroutineScope 'coroutineScope { this }'
-                //  emit to Loading in ViewModel, pass in FlowCollector 'this'
                 boundaryCallback = PagedListBoundaryCallBack(repoLoadMoreCallback)
             ).asFlow().collect { results ->
                 emit(success(results))
@@ -53,20 +46,24 @@ class FeedRepository @Inject constructor(
         emit(loading(null))
         var page = sharedPreferences.getInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT)
         page++
-        sharedPreferences.edit().putInt(FEED_LIST_PAGE_NUM_KEY, page).apply()
         try {
-            val tweetsResponse = service.getTweets(
-                listType = FEED_LIST_TYPE,
-                listId = FEED_LIST_ID,
-                count = FEED_LIST_SIZE,
-                page = page.toString()
-            )
+            val tweetsResponse = getTweets(page)
             if (tweetsResponse.isNotEmpty()) {
                 emit(success(null))
                 dao.insertAll(tweetsResponse)
+                sharedPreferences.edit().putInt(FEED_LIST_PAGE_NUM_KEY, page).apply()
             }
         } catch (exception: Exception) {
             emit(error(exception.localizedMessage!!, null))
         }
+    }
+
+    private suspend fun getTweets(page: Int): List<Tweet> {
+        return service.getTweets(
+            listType = FEED_LIST_TYPE,
+            listId = FEED_LIST_ID,
+            count = FEED_LIST_SIZE,
+            page = page.toString()
+        )
     }
 }
