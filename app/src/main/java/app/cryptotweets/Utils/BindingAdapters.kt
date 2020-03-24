@@ -32,8 +32,8 @@ private fun ImageView.transformImage(it: RequestBuilder<Drawable>) {
 }
 
 @BindingAdapter("timestamp")
-fun TextView.setTimestamp(createdAt: String) {
-    createdAt.let {
+fun TextView.setTimestamp(createdAt: String?) {
+    createdAt?.let {
         val twitterFormat = context.getString(R.string.twitter_date_time_format)
         val simpleDateFormat = SimpleDateFormat(twitterFormat, Locale.getDefault())
         val date = simpleDateFormat.parse(createdAt)

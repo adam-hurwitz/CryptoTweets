@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
 import app.cryptotweets.feed.FeedRepository
-import kotlinx.coroutines.InternalCoroutinesApi
 
 class FeedViewModelFactory(
     owner: SavedStateRegistryOwner,
@@ -15,5 +14,5 @@ class FeedViewModelFactory(
         key: String,
         modelClass: Class<T>,
         handle: SavedStateHandle
-    ) = FeedViewModel(savedStateHandle = handle, feedRepository = feedRepository) as T
+    ) = FeedViewModel(feedRepository = feedRepository) as T
 }

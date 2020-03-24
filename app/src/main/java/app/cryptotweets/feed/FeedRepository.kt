@@ -7,8 +7,9 @@ import app.cryptotweets.Utils.*
 import app.cryptotweets.Utils.Resource.Companion.error
 import app.cryptotweets.Utils.Resource.Companion.loading
 import app.cryptotweets.Utils.Resource.Companion.success
-import app.cryptotweets.feed.network.FeedBoundaryCallBack
 import app.cryptotweets.feed.network.FeedService
+import app.cryptotweets.feed.network.PagedListBoundaryCallBack
+import app.cryptotweets.feed.network.RepoLoadMoreCallback
 import app.cryptotweets.feed.room.FeedDao
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
@@ -21,7 +22,7 @@ class FeedRepository @Inject constructor(
     private val dao: FeedDao,
     private val service: FeedService
 ) {
-    fun initFeed(feedRepoCallback: FeedRepoCallback) = flow {
+    fun initFeed(repoLoadMoreCallback: RepoLoadMoreCallback) = flow {
         emit(loading(null))
         try {
             sharedPreferences.edit()
@@ -39,7 +40,7 @@ class FeedRepository @Inject constructor(
                 // TODO: Experiment
                 //  Passing in CoroutineScope 'coroutineScope { this }'
                 //  emit to Loading in ViewModel, pass in FlowCollector 'this'
-                boundaryCallback = FeedBoundaryCallBack(feedRepoCallback)
+                boundaryCallback = PagedListBoundaryCallBack(repoLoadMoreCallback)
             ).asFlow().collect { results ->
                 emit(success(results))
             }
@@ -60,15 +61,12 @@ class FeedRepository @Inject constructor(
                 count = FEED_LIST_SIZE,
                 page = page.toString()
             )
-            if (tweetsResponse.isNotEmpty())
+            if (tweetsResponse.isNotEmpty()) {
+                emit(success(null))
                 dao.insertAll(tweetsResponse)
+            }
         } catch (exception: Exception) {
             emit(error(exception.localizedMessage!!, null))
         }
     }
-}
-
-// TODO: Refactor
-interface FeedRepoCallback {
-    fun onItemEndLoaded()
 }
