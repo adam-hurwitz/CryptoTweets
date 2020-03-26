@@ -2,22 +2,20 @@ package app.cryptotweets.feed
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cryptotweets.App
-import app.cryptotweets.databinding.FragmentFeedBinding
+import app.cryptotweets.R
 import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
-class FeedFragment : Fragment() {
+class FeedFragment : Fragment(R.layout.fragment_feed) {
     private val LOG = FeedFragment::class.java.simpleName
 
     @Inject
@@ -33,13 +31,6 @@ class FeedFragment : Fragment() {
         super.onAttach(context)
         (context.applicationContext as App).appComponent.inject(this)
     }
-
-    @ExperimentalCoroutinesApi
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragmentFeedBinding.inflate(inflater, container, false).root
 
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

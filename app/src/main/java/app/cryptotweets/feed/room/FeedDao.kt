@@ -10,7 +10,7 @@ import app.cryptotweets.feed.models.Tweet
 @Dao
 interface FeedDao {
 
-    @Query("SELECT * FROM feed ORDER BY created_at DESC")
+    @Query("SELECT * FROM feed ORDER BY tweet_id DESC")
     fun getAll(): DataSource.Factory<Int, Tweet>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
