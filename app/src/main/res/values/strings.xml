@@ -5,4 +5,6 @@
     <string name="media_image_content_description">Tweet image</string>
     <string name="twitter_date_time_format">EEE MMM dd HH:mm:ss ZZZZZ yyyy</string>
     <string name="cryptotweets_date_time_format">h:mm a MMM d</string>
+    <string name="user_profile_title">User profile title</string>
+    <string name="user_profile_some_info">Some info about the user.</string>
 </resources>

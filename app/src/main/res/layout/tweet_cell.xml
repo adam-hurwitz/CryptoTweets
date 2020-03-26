@@ -8,6 +8,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="onClick"
+            type="android.view.View.OnClickListener" />
+
+        <variable
             name="tweet"
             type="app.cryptotweets.feed.models.Tweet" />
 
@@ -30,6 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/user_image_height"
                 android:contentDescription="@string/user_image_content_description"
+                android:onClick="@{onClick}"
                 android:paddingEnd="@dimen/padding_small"
                 app:imageUrl="@{tweet.user.profile_image_url_https}"
                 app:layout_constraintBottom_toTopOf="@id/tweetText"

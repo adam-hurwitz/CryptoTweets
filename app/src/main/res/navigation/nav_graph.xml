@@ -8,6 +8,23 @@
     <fragment
         android:id="@+id/feedFragment"
         android:name="app.cryptotweets.feed.FeedFragment"
-        android:label="fragment_feed"
-        tools:layout="@layout/fragment_feed" />
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_feed">
+        <action
+            android:id="@+id/action_feedFragment_to_tweetDetailFragment"
+            app:destination="@id/tweetDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tweetDetailFragment"
+        android:name="app.cryptotweets.TweetDetailFragment"
+        android:label="{label}"
+        tools:layout="@layout/fragment_tweet_detail">
+        <argument
+            android:name="label"
+            android:defaultValue="null"
+            app:argType="string" />
+        <argument
+            android:name="user"
+            app:argType="app.cryptotweets.feed.models.User" />
+    </fragment>
 </navigation>
