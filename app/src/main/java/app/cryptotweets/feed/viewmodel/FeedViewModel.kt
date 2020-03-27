@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cryptotweets.Utils.Status.*
 import app.cryptotweets.feed.FeedRepository
-import app.cryptotweets.feed.FeedViewState
-import app.cryptotweets.feed._FeedViewState
 import app.cryptotweets.feed.network.RepositoryLoadingCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,8 +19,11 @@ class FeedViewModel(
 ) : ViewModel(), RepositoryLoadingCallback {
     val LOG = FeedViewModel::class.java.simpleName
 
-    private val _feedViewState = _FeedViewState()
-    val feedViewState = FeedViewState(_feedViewState)
+    private val _viewState = _FeedViewState()
+    val viewState = FeedViewState(_viewState)
+
+    private val _viewEffects = _FeedViewEffects()
+    val viewEffects = FeedViewEffects(_viewEffects)
 
     init {
         initFeed(true)
@@ -30,15 +31,18 @@ class FeedViewModel(
 
     private fun initFeed(toRetry: Boolean) {
         feedRepository.initFeed(this, toRetry).onEach { results ->
-            when (results.status) {
-                LOADING -> {
-                    // TODO: Show progressBar.
-                    Log.v(LOG, "Loading")
+            withContext(Dispatchers.Main) {
+                when (results.status) {
+                    LOADING -> _viewEffects._isLoading.value = true
+                    SUCCESS -> {
+                        _viewEffects._isLoading.value = false
+                        _viewState._feed.value = results.data
+                    }
+                    ERROR -> {
+                        _viewEffects._isLoading.value = false
+                        Log.e(LOG, "Error + ${results.message}")
+                    } // TODO: Show snackbar.
                 }
-                SUCCESS -> withContext(Dispatchers.Main) {
-                    _feedViewState._feed.value = results.data
-                }
-                ERROR -> Log.e(LOG, "Error + ${results.message}") // TODO: Show snackbar.
             }
         }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
     }

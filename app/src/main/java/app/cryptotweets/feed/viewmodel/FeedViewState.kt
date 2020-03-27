@@ -1,4 +1,4 @@
-package app.cryptotweets.feed
+package app.cryptotweets.feed.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +9,6 @@ data class _FeedViewState(
     val _feed: MutableLiveData<PagedList<Tweet>> = MutableLiveData()
 )
 
-data class FeedViewState(private val _feedViewState: _FeedViewState) {
-    val feed: LiveData<PagedList<Tweet>> = _feedViewState._feed
+data class FeedViewState(private val _viewState: _FeedViewState) {
+    val feed: LiveData<PagedList<Tweet>> = _viewState._feed
 }

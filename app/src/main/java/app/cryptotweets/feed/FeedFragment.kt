@@ -3,6 +3,8 @@ package app.cryptotweets.feed
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
@@ -37,6 +39,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         super.onViewCreated(view, savedInstanceState)
         initAdapters()
         initViewState()
+        initViewEffects()
     }
 
     private fun initAdapters() {
@@ -47,9 +50,17 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     @ExperimentalCoroutinesApi
     private fun initViewState() {
-        viewModel.feedViewState.feed.observe(viewLifecycleOwner) { pagedList ->
+        viewModel.viewState.feed.observe(viewLifecycleOwner) { pagedList ->
             adapter.submitList(pagedList)
         }
     }
+
+    private fun initViewEffects() {
+        viewModel.viewEffects.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) progressBar.visibility = VISIBLE
+            else progressBar.visibility = GONE
+        }
+    }
+
 }
 
