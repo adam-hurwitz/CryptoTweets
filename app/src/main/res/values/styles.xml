@@ -7,6 +7,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TweetCellTheme">
+        <item name="colorControlHighlight">@color/colorAccent</item>
+    </style>
+
     <style name="ProgressBarTheme">
         <item name="colorAccent">@color/colorAccent</item>
     </style>

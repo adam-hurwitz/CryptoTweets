@@ -29,7 +29,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/padding_medium">
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:padding="@dimen/padding_medium"
+            android:theme="@style/TweetCellTheme">
 
             <ImageView
                 android:id="@+id/userImage"
