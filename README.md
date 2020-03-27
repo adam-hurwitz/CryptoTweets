@@ -1,7 +1,7 @@
 # CryptoTweets
 Sample app displaying cryptocurrency related tweets. 
 
-![](https://adam-hurwitz.firebaseapp.com/CryptoTweets/CryptoTweets.gif)
+![CryptoTweets gif image](CryptoTweets.gif)
 
 # Setup authentication
 
