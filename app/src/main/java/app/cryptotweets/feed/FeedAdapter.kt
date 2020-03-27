@@ -1,13 +1,20 @@
 package app.cryptotweets.feed
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.findNavController
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import app.cryptotweets.R
+import app.cryptotweets.Utils.TWEET_BASE_URL
+import app.cryptotweets.Utils.TWEET_PATH_STATUS_URL
+import app.cryptotweets.Utils.TWEET_URL_PATTERN
 import app.cryptotweets.databinding.TweetCellBinding
 import app.cryptotweets.feed.models.Tweet
 
@@ -16,7 +23,8 @@ val DIFF_UTIL = object : DiffUtil.ItemCallback<Tweet>() {
     override fun areContentsTheSame(oldItem: Tweet, newItem: Tweet) = oldItem == newItem
 }
 
-class FeedAdapter : PagedListAdapter<Tweet, FeedAdapter.FeedViewHolder>(DIFF_UTIL) {
+class FeedAdapter(val context: Context) :
+    PagedListAdapter<Tweet, FeedAdapter.FeedViewHolder>(DIFF_UTIL) {
     class FeedViewHolder(private val binding: TweetCellBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(tweet: Tweet, onClickListener: View.OnClickListener) {
@@ -24,7 +32,6 @@ class FeedAdapter : PagedListAdapter<Tweet, FeedAdapter.FeedViewHolder>(DIFF_UTI
             binding.onClick = onClickListener
             binding.executePendingBindings()
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedAdapter.FeedViewHolder {
@@ -39,10 +46,24 @@ class FeedAdapter : PagedListAdapter<Tweet, FeedAdapter.FeedViewHolder>(DIFF_UTI
     }
 
     private fun onClickListener(tweet: Tweet) = View.OnClickListener { view ->
-        val action = FeedFragmentDirections.actionFeedFragmentToTweetDetailFragment(
+        val userAction = FeedFragmentDirections.actionFeedFragmentToTweetDetailFragment(
             label = tweet.user.screen_name,
             user = tweet.user
         )
-        if (view.id == R.id.userImage) view.findNavController().navigate(action)
+        when (view.id) {
+            R.id.userImage, R.id.screenName -> view.findNavController().navigate(userAction)
+            R.id.card, R.id.tweetText -> {
+                val url = String.format(
+                    TWEET_URL_PATTERN, TWEET_BASE_URL,
+                    tweet.user.screen_name,
+                    TWEET_PATH_STATUS_URL,
+                    tweet.id
+                )
+                val webpage: Uri = Uri.parse(url)
+                val intent = Intent(Intent.ACTION_VIEW, webpage)
+                if (intent.resolveActivity(context.packageManager) != null)
+                    startActivity(context, intent, null)
+            }
+        }
     }
 }

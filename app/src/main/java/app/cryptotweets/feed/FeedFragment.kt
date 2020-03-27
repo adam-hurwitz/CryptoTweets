@@ -40,7 +40,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     }
 
     private fun initAdapters() {
-        adapter = FeedAdapter()
+        adapter = FeedAdapter(requireContext())
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
     }

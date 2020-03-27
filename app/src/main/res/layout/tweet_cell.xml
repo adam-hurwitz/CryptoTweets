@@ -18,11 +18,13 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_tiniest"
         android:layout_marginBottom="@dimen/margin_tiniest"
-        android:elevation="@dimen/tweet_cell_elevation">
+        android:elevation="@dimen/tweet_cell_elevation"
+        android:onClick="@{onClick}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -49,6 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:gravity="center"
+                android:onClick="@{onClick}"
                 android:text='@{String.format(@string/screen_name_at, tweet.user.screen_name)}'
                 app:layout_constraintBottom_toBottomOf="@id/userImage"
                 app:layout_constraintLeft_toRightOf="@id/userImage"
@@ -60,6 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:autoLink="all"
+                android:onClick="@{onClick}"
                 android:paddingTop="@dimen/padding_small"
                 android:text="@{tweet.text}"
                 app:layout_constraintBottom_toTopOf="@id/mediaImage"

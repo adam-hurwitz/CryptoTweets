@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import app.cryptotweets.Utils.AUTHORIZATION_KEY
-import app.cryptotweets.Utils.BASE_URL
 import app.cryptotweets.Utils.CRYPTOTWEETS_DATABASE_NAME
 import app.cryptotweets.Utils.CRYPTOTWEETS_SHARED_PREF
+import app.cryptotweets.Utils.TWITTER_API_BASE_URL
 import app.cryptotweets.auth
 import app.cryptotweets.feed.network.FeedService
 import app.cryptotweets.feed.room.FeedDatabase
@@ -42,7 +42,7 @@ class UtilsModule(private val app: Application) {
     @Singleton
     @Provides
     fun providesRetrofit() = Retrofit.Builder()
-        .baseUrl(BASE_URL)
+        .baseUrl(TWITTER_API_BASE_URL)
         .client(providesOkHttpClient())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
