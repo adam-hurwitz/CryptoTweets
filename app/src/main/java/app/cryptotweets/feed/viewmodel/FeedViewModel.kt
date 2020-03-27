@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.cryptotweets.Utils.Status.*
+import app.cryptotweets.feed.FeedFragment
 import app.cryptotweets.feed.FeedRepository
 import app.cryptotweets.feed.network.RepositoryLoadingCallback
 import kotlinx.coroutines.Dispatchers
@@ -16,8 +17,8 @@ import kotlinx.coroutines.withContext
 @ExperimentalCoroutinesApi
 class FeedViewModel(
     private val feedRepository: FeedRepository
-) : ViewModel(), RepositoryLoadingCallback {
-    val LOG = FeedViewModel::class.java.simpleName
+) : ViewModel(), RepositoryLoadingCallback, FeedViewEvents {
+    val LOG_TAG = FeedViewModel::class.java.simpleName
 
     private val _viewState = _FeedViewState()
     val viewState = FeedViewState(_viewState)
@@ -26,6 +27,18 @@ class FeedViewModel(
     val viewEffects = FeedViewEffects(_viewEffects)
 
     init {
+        initFeed(true)
+    }
+
+    fun launchFeedEvents(fragment: FeedFragment) {
+        fragment.attachViewEvents(this)
+    }
+
+    override fun swipeToRefreshEvent() {
+        initFeed(true)
+    }
+
+    override fun retryEvent() {
         initFeed(true)
     }
 
@@ -40,8 +53,8 @@ class FeedViewModel(
                     }
                     ERROR -> {
                         _viewEffects._isLoading.value = false
-                        Log.e(LOG, "Error + ${results.message}")
-                    } // TODO: Show snackbar.
+                        _viewEffects._isError.value = true
+                    }
                 }
             }
         }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
@@ -53,10 +66,12 @@ class FeedViewModel(
 
     override fun onItemEndLoaded() {
         feedRepository.loadMoreFeed().onEach { results ->
-            when (results.status) {
-                LOADING -> println("Loading") // TODO: Show progressBar.
-                SUCCESS -> println("Success") // TODO: Log.
-                ERROR -> println("Error") // TODO: Show snackbar.
+            withContext(Dispatchers.Main) {
+                when (results.status) {
+                    LOADING -> Log.v(LOG_TAG, "onItemEndLoaded LOADING")
+                    SUCCESS -> Log.v(LOG_TAG, "onItemEndLoaded SUCCESS")
+                    ERROR -> _viewEffects._isError.value = true
+                }
             }
         }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
     }

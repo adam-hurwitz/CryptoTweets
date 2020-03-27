@@ -5,23 +5,28 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cryptotweets.App
 import app.cryptotweets.R
+import app.cryptotweets.feed.viewmodel.FeedViewEvents
 import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+
 class FeedFragment : Fragment(R.layout.fragment_feed) {
-    private val LOG = FeedFragment::class.java.simpleName
 
     @Inject
     lateinit var repository: FeedRepository
+    lateinit var viewEvents: FeedViewEvents
     lateinit var adapter: FeedAdapter
 
     @ExperimentalCoroutinesApi
@@ -37,12 +42,18 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapters()
+        viewModel.launchFeedEvents(this)
+        initAdapter()
         initViewState()
         initViewEffects()
+        initSwipeToRefresh()
     }
 
-    private fun initAdapters() {
+    fun attachViewEvents(viewEvents: FeedViewEvents) {
+        this.viewEvents = viewEvents
+    }
+
+    private fun initAdapter() {
         adapter = FeedAdapter(requireContext())
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
@@ -58,7 +69,29 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private fun initViewEffects() {
         viewModel.viewEffects.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) progressBar.visibility = VISIBLE
-            else progressBar.visibility = GONE
+            else {
+                progressBar.visibility = GONE
+                swipeToRefresh.isRefreshing = false
+            }
+        }
+        viewModel.viewEffects.isError.observe(viewLifecycleOwner) { isError ->
+            val snackbar = Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
+            snackbar.setAction(R.string.feed_error_retry, onRretryListener())
+            val textView =
+                snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+            textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+            snackbar.show()
+        }
+    }
+
+    private fun onRretryListener() = View.OnClickListener {
+        viewEvents.retryEvent()
+    }
+
+    private fun initSwipeToRefresh() {
+        swipeToRefresh.setColorSchemeResources(R.color.colorAccent)
+        swipeToRefresh.setOnRefreshListener {
+            viewEvents.swipeToRefreshEvent()
         }
     }
 

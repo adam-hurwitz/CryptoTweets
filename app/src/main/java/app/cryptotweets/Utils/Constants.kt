@@ -15,7 +15,7 @@ const val FEED_LIST_PAGE_NUM_DEFAULT = 1
 const val TWITTER_API_BASE_URL = "https://api.twitter.com/1.1/"
 const val FEED_LIST_TYPE = "statuses.json"
 const val FEED_LIST_ID = "1173707664863350785"
-const val FEED_LIST_SIZE = "100"
+const val FEED_LIST_SIZE = "23"
 // FeedService
 const val LIST_TYPE_PATH = "listType"
 const val LIST_ID_QUERY = "list_id"
