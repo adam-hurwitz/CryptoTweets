@@ -3,13 +3,18 @@ Sample app displaying cryptocurrency related tweets.
 
 ![CryptoTweets gif image](CryptoTweets.gif)
 
-# Setup authentication
+# Setup 
+
+## Authentication
 
 1. [Signup][1] for Twitter developer account.
     
 2. [Create][2] a _Bearer Token_ for the Android app.
     
 3. Insert the token as a `String` `val` named `auth`, with the format `Bearer {INSERT_YOUR_TOKEN}`, in an _Auth.kt_ file under the following path: _CryptoTweets > app > src > main > java > app > cryptotweets_. Be sure to add _Auth.kt_ to the _gitignore_ file(s).   
+
+## Sample request
+Get Twitter list: https://api.twitter.com/1.1/lists/statuses.json?list_id=1173707664863350785&count=10&page=1
 
 # Libraries used
 
