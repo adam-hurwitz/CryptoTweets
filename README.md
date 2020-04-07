@@ -11,13 +11,13 @@ Sample app displaying cryptocurrency related tweets.
     
 2. [Create][2] a _Bearer Token_ for the Android app.
     
-3. Insert the token as a request header in Retrofit.
+3. Insert the token as a [request header][13] in Retrofit.
 
-   A. Key: `Authorization` 
+   A. Create _Auth.kt_ file in the path: _CryptoTweets > app > src > main > java > app > cryptotweets_. 
    
-   B. Value format: `Bearer {INSERT_YOUR_TOKEN}`
+   B. Key: `Authorization` 
    
-   C. In an _Auth.kt_ file under the following path: _CryptoTweets > app > src > main > java > app > cryptotweets_. 
+   C. Value format: `Bearer {INSERT_YOUR_TOKEN}`
    
    D. Add _Auth.kt_ to the _gitignore_ file(s).   
 
@@ -49,3 +49,4 @@ Get Twitter list: https://api.twitter.com/1.1/lists/statuses.json?list_id=117370
 [10]:https://developer.android.com/topic/libraries/data-binding
 [11]:https://github.com/bumptech/glide 
 [12]:https://developer.android.com/topic/libraries/architecture/paging
+[13]: https://futurestud.io/tutorials/retrofit-add-custom-request-header
