@@ -23,7 +23,7 @@ Sample app displaying cryptocurrency related tweets.
 
 ## Sample urls
 
-- `@Get` Twitter list request: https://api.twitter.com/1.1/lists/statuses.json?list_id=1173707664863350785&count=10&page=1
+- `@GET` Twitter list request: https://api.twitter.com/1.1/lists/statuses.json?list_id=1173707664863350785&count=10&page=1
 - Tweet url: https://twitter.com/VitalikButerin/status/1247607628668309507 
 
 # Libraries used
