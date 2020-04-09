@@ -7,6 +7,8 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
+
+    // ViewModel support: init with 'by' delegate
     kotlinOptions { jvmTarget = '1.8' }
 
     defaultConfig {
@@ -26,6 +28,7 @@ android {
         }
     }
 
+    // Retrofit support: 'Invoke-customs are only supported starting with Android O (--min-api 26)'
     compileOptions { targetCompatibility JavaVersion.VERSION_1_8 }
 
     dataBinding.enabled = true
