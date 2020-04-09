@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 app/src/main/java/app/cryptotweets/Auth.kt
+/app/src/main/java/app/cryptotweets/Auth.kt
