@@ -3,7 +3,12 @@ package app.cryptotweets.feed
 import android.content.SharedPreferences
 import androidx.lifecycle.asFlow
 import androidx.paging.toLiveData
-import app.cryptotweets.Utils.*
+import app.cryptotweets.Utils.FEED_LIST_ID
+import app.cryptotweets.Utils.FEED_LIST_PAGE_NUM_DEFAULT
+import app.cryptotweets.Utils.FEED_LIST_PAGE_NUM_KEY
+import app.cryptotweets.Utils.FEED_LIST_SIZE
+import app.cryptotweets.Utils.FEED_LIST_TYPE
+import app.cryptotweets.Utils.FEED_PAGEDLIST_SIZE
 import app.cryptotweets.Utils.Resource.Companion.error
 import app.cryptotweets.Utils.Resource.Companion.loading
 import app.cryptotweets.Utils.Resource.Companion.success
@@ -30,11 +35,13 @@ class FeedRepository @Inject constructor(
         val page = sharedPreferences.getInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT)
         try {
             val tweetsResponse = getTweets(page)
-            dao.insertAll(tweetsResponse)
-            dao.getAll().toLiveData(
-                pageSize = FEED_PAGEDLIST_SIZE,
-                boundaryCallback = PagedListBoundaryCallBack(repositoryLoadingCallback, toRetry)
-            ).asFlow().collect { results ->
+            dao.addTweets(tweetsResponse)
+            val tweetsQuery = dao.getAllTweets()
+                .toLiveData(
+                    pageSize = FEED_PAGEDLIST_SIZE,
+                    boundaryCallback = PagedListBoundaryCallBack(repositoryLoadingCallback, toRetry)
+                ).asFlow()
+            tweetsQuery.collect { results ->
                 emit(success(results))
             }
         } catch (exception: Exception) {
@@ -50,7 +57,7 @@ class FeedRepository @Inject constructor(
             val tweetsResponse = getTweets(page)
             if (tweetsResponse.isNotEmpty()) {
                 emit(success(null))
-                dao.insertAll(tweetsResponse)
+                dao.addTweets(tweetsResponse)
                 sharedPreferences.edit().putInt(FEED_LIST_PAGE_NUM_KEY, page).apply()
             }
         } catch (exception: Exception) {

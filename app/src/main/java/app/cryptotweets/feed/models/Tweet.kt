@@ -8,8 +8,8 @@ import app.cryptotweets.feed.models.entities.Entities
 
 @Entity(tableName = "feed")
 data class Tweet(
-    @PrimaryKey @ColumnInfo(name = "tweet_id") val id: Long,
-    @ColumnInfo(name = "created_at") val created_at: String,
+    @PrimaryKey @ColumnInfo(name = "tweetId") val id: Long,
+    @ColumnInfo(name = "createdAt") val created_at: String,
     val text: String,
     @Embedded val user: User,
     @Embedded val entities: Entities

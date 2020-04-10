@@ -57,9 +57,5 @@ class UtilsModule(private val app: Application) {
         app,
         FeedDatabase::class.java,
         CRYPTOTWEETS_DATABASE_NAME
-    ).build()
-
-    @Singleton
-    @Provides
-    fun providesFeedDao() = providesFeedDatabase().feedDao()
+    ).build().feedDao()
 }
