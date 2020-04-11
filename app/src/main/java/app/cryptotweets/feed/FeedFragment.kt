@@ -13,7 +13,7 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cryptotweets.App
 import app.cryptotweets.R
-import app.cryptotweets.feed.adapter.FeedAdapter
+import app.cryptotweets.feed.network.FeedRepository
 import app.cryptotweets.feed.viewmodel.FeedViewEvent
 import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory

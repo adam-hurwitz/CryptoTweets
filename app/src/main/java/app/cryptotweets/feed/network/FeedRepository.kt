@@ -1,12 +1,10 @@
-package app.cryptotweets.feed
+package app.cryptotweets.feed.network
 
 import android.content.SharedPreferences
 import androidx.lifecycle.asFlow
+import androidx.paging.PagedList
 import androidx.paging.toLiveData
-import app.cryptotweets.feed.adapter.PagedListBoundaryCallBack
 import app.cryptotweets.feed.models.Tweet
-import app.cryptotweets.feed.network.FeedService
-import app.cryptotweets.feed.network.RepositoryLoadingCallback
 import app.cryptotweets.feed.room.FeedDao
 import app.cryptotweets.utils.FEED_LIST_ID
 import app.cryptotweets.utils.FEED_LIST_PAGE_NUM_DEFAULT
@@ -28,7 +26,7 @@ class FeedRepository @Inject constructor(
     private val dao: FeedDao,
     private val service: FeedService
 ) {
-    fun initFeed(repositoryLoadingCallback: RepositoryLoadingCallback, toRetry: Boolean) = flow {
+    fun initFeed(pagedListBoundaryCallBack: PagedList.BoundaryCallback<Tweet>) = flow {
         emit(loading(null))
         // Page number reset when new data request is made.
         sharedPreferences.edit().putInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT).apply()
@@ -39,10 +37,7 @@ class FeedRepository @Inject constructor(
             val tweetsQuery = dao.getAllTweets()
                 .toLiveData(
                     pageSize = FEED_PAGEDLIST_SIZE,
-                    boundaryCallback = PagedListBoundaryCallBack(
-                        repositoryLoadingCallback,
-                        toRetry
-                    )
+                    boundaryCallback = pagedListBoundaryCallBack
                 ).asFlow()
             tweetsQuery.collect { results ->
                 emit(success(results))

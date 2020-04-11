@@ -1,4 +1,4 @@
-package app.cryptotweets.feed.adapter
+package app.cryptotweets.feed
 
 import android.content.Context
 import android.content.Intent
@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import app.cryptotweets.R
 import app.cryptotweets.databinding.TweetCellBinding
-import app.cryptotweets.feed.FeedFragmentDirections
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.utils.TWEET_BASE_URL
 import app.cryptotweets.utils.TWEET_PATH_STATUS_URL

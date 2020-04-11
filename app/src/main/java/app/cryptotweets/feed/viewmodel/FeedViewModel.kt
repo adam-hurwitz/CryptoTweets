@@ -3,9 +3,10 @@ package app.cryptotweets.feed.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagedList
 import app.cryptotweets.feed.FeedFragment
-import app.cryptotweets.feed.FeedRepository
-import app.cryptotweets.feed.network.RepositoryLoadingCallback
+import app.cryptotweets.feed.models.Tweet
+import app.cryptotweets.feed.network.FeedRepository
 import app.cryptotweets.utils.Status.ERROR
 import app.cryptotweets.utils.Status.LOADING
 import app.cryptotweets.utils.Status.SUCCESS
@@ -17,9 +18,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 @ExperimentalCoroutinesApi
-class FeedViewModel(
-    private val feedRepository: FeedRepository
-) : ViewModel(), RepositoryLoadingCallback, FeedViewEvent {
+class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), FeedViewEvent {
     val LOG_TAG = FeedViewModel::class.java.simpleName
 
     private val _viewState = _FeedViewState()
@@ -44,24 +43,8 @@ class FeedViewModel(
         initFeed(true)
     }
 
-    override fun onZeroItemsLoaded() {
-        initFeed(false)
-    }
-
-    override fun onItemEndLoaded() {
-        feedRepository.loadMoreFeed().onEach { results ->
-            withContext(Dispatchers.Main) {
-                when (results.status) {
-                    LOADING -> Log.v(LOG_TAG, "onItemEndLoaded LOADING")
-                    SUCCESS -> Log.v(LOG_TAG, "onItemEndLoaded SUCCESS")
-                    ERROR -> _viewEffect._isError.value = true
-                }
-            }
-        }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
-    }
-
     private fun initFeed(toRetry: Boolean) {
-        feedRepository.initFeed(this, toRetry).onEach { results ->
+        feedRepository.initFeed(createBoundaryCallback(toRetry)).onEach { results ->
             withContext(Dispatchers.Main) {
                 when (results.status) {
                     LOADING -> _viewEffect._isLoading.value = true
@@ -77,4 +60,26 @@ class FeedViewModel(
             }
         }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
     }
+
+    private fun createBoundaryCallback(toRetry: Boolean) =
+        object : PagedList.BoundaryCallback<Tweet>() {
+
+            override fun onZeroItemsLoaded() {
+                super.onZeroItemsLoaded()
+                if (toRetry) initFeed(false)
+            }
+
+            override fun onItemAtEndLoaded(itemAtEnd: Tweet) {
+                super.onItemAtEndLoaded(itemAtEnd)
+                feedRepository.loadMoreFeed().onEach { results ->
+                    withContext(Dispatchers.Main) {
+                        when (results.status) {
+                            LOADING -> Log.v(LOG_TAG, "onItemEndLoaded LOADING")
+                            SUCCESS -> Log.v(LOG_TAG, "onItemEndLoaded SUCCESS")
+                            ERROR -> _viewEffect._isError.value = true
+                        }
+                    }
+                }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
+            }
+        }
 }
