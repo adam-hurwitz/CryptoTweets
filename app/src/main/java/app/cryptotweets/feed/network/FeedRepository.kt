@@ -32,8 +32,7 @@ class FeedRepository @Inject constructor(
         sharedPreferences.edit().putInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT).apply()
         val page = sharedPreferences.getInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT)
         try {
-            val tweetsResponse = getTweets(page)
-            dao.addTweets(tweetsResponse)
+            dao.addTweets(getTweetsRequest(page))
             val tweetsQuery = dao.getAllTweets()
                 .toLiveData(
                     pageSize = FEED_PAGEDLIST_SIZE,
@@ -52,7 +51,7 @@ class FeedRepository @Inject constructor(
         var page = sharedPreferences.getInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT)
         page++
         try {
-            val tweetsResponse = getTweets(page)
+            val tweetsResponse = getTweetsRequest(page)
             if (tweetsResponse.isNotEmpty()) {
                 emit(success(null))
                 dao.addTweets(tweetsResponse)
@@ -63,12 +62,11 @@ class FeedRepository @Inject constructor(
         }
     }
 
-    private suspend fun getTweets(page: Int): List<Tweet> {
-        return service.getTweets(
-            listType = FEED_LIST_TYPE,
-            listId = FEED_LIST_ID,
-            count = FEED_LIST_SIZE,
-            page = page.toString()
-        )
-    }
+    private suspend fun getTweetsRequest(page: Int) = service.getTweets(
+        listType = FEED_LIST_TYPE,
+        listId = FEED_LIST_ID,
+        count = FEED_LIST_SIZE,
+        page = page.toString()
+    )
+
 }

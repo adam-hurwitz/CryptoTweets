@@ -44,7 +44,7 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
     }
 
     private fun initFeed(toRetry: Boolean) {
-        feedRepository.initFeed(createBoundaryCallback(toRetry)).onEach { results ->
+        feedRepository.initFeed(pagedListBoundaryCallback(toRetry)).onEach { results ->
             withContext(Dispatchers.Main) {
                 when (results.status) {
                     LOADING -> _viewEffect._isLoading.value = true
@@ -61,7 +61,7 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
         }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
     }
 
-    private fun createBoundaryCallback(toRetry: Boolean) =
+    private fun pagedListBoundaryCallback(toRetry: Boolean) =
         object : PagedList.BoundaryCallback<Tweet>() {
 
             override fun onZeroItemsLoaded() {
