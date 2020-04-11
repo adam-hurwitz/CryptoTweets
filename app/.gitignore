@@ -1,4 +1,4 @@
 /build
-/src/main/java/app/cryptotweets/Auth.kt
-!/src/main/java/app/cryptotweets/Auth.kt
-/src/main/java/app/cryptotweets/Auth.kt
+/src/main/java/app/cryptotweets/utils/Auth.kt
+!/src/main/java/app/cryptotweets/utils/Auth.kt
+/src/main/java/app/cryptotweets/utils/Auth.kt

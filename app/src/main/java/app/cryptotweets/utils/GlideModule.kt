@@ -1,4 +1,4 @@
-package app.cryptotweets.Utils
+package app.cryptotweets.utils
 
 import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.module.AppGlideModule

@@ -1,4 +1,4 @@
-package app.cryptotweets.Utils
+package app.cryptotweets.utils
 
 enum class Status {
     LOADING, SUCCESS, ERROR

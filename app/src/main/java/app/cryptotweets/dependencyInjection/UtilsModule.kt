@@ -3,13 +3,13 @@ package app.cryptotweets.dependencyInjection
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import app.cryptotweets.Utils.AUTHORIZATION_KEY
-import app.cryptotweets.Utils.CRYPTOTWEETS_DATABASE_NAME
-import app.cryptotweets.Utils.CRYPTOTWEETS_SHARED_PREF
-import app.cryptotweets.Utils.TWITTER_API_BASE_URL
-import app.cryptotweets.auth
 import app.cryptotweets.feed.network.FeedService
-import app.cryptotweets.feed.room.FeedDatabase
+import app.cryptotweets.utils.AUTHORIZATION_KEY
+import app.cryptotweets.utils.CRYPTOTWEETS_DATABASE_NAME
+import app.cryptotweets.utils.CRYPTOTWEETS_SHARED_PREF
+import app.cryptotweets.utils.CryptoTweetsDatabase
+import app.cryptotweets.utils.TWITTER_API_BASE_URL
+import app.cryptotweets.utils.auth
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
@@ -29,7 +29,7 @@ class UtilsModule(private val app: Application) {
 
     @Singleton
     @Provides
-    fun providesOkHttpClient() = OkHttpClient.Builder()
+    fun providesOkHttpClient() = OkHttpClient().newBuilder()
         .addInterceptor(object : Interceptor {
             override fun intercept(chain: Interceptor.Chain): Response {
                 val request = chain.request().newBuilder()
@@ -41,21 +41,18 @@ class UtilsModule(private val app: Application) {
 
     @Singleton
     @Provides
-    fun providesRetrofit() = Retrofit.Builder()
+    fun providesService() = Retrofit.Builder()
         .baseUrl(TWITTER_API_BASE_URL)
         .client(providesOkHttpClient())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+        .create(FeedService::class.java)
 
     @Singleton
     @Provides
-    fun providesFeedService() = providesRetrofit().create(FeedService::class.java)
-
-    @Singleton
-    @Provides
-    fun providesFeedDatabase() = Room.databaseBuilder(
+    fun providesFeedDao() = Room.databaseBuilder(
         app,
-        FeedDatabase::class.java,
+        CryptoTweetsDatabase::class.java,
         CRYPTOTWEETS_DATABASE_NAME
     ).build().feedDao()
 }

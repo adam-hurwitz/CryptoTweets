@@ -3,10 +3,12 @@ package app.cryptotweets.feed.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.cryptotweets.Utils.Status.*
 import app.cryptotweets.feed.FeedFragment
 import app.cryptotweets.feed.FeedRepository
 import app.cryptotweets.feed.network.RepositoryLoadingCallback
+import app.cryptotweets.utils.Status.ERROR
+import app.cryptotweets.utils.Status.LOADING
+import app.cryptotweets.utils.Status.SUCCESS
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOn
@@ -17,20 +19,20 @@ import kotlinx.coroutines.withContext
 @ExperimentalCoroutinesApi
 class FeedViewModel(
     private val feedRepository: FeedRepository
-) : ViewModel(), RepositoryLoadingCallback, FeedViewEvents {
+) : ViewModel(), RepositoryLoadingCallback, FeedViewEvent {
     val LOG_TAG = FeedViewModel::class.java.simpleName
 
     private val _viewState = _FeedViewState()
     val viewState = FeedViewState(_viewState)
 
-    private val _viewEffects = _FeedViewEffects()
-    val viewEffects = FeedViewEffects(_viewEffects)
+    private val _viewEffect = _FeedViewEffect()
+    val viewEffect = FeedViewEffect(_viewEffect)
 
     init {
         initFeed(true)
     }
 
-    fun launchFeedEvents(fragment: FeedFragment) {
+    fun launchViewEvents(fragment: FeedFragment) {
         fragment.attachViewEvents(this)
     }
 
@@ -40,24 +42,6 @@ class FeedViewModel(
 
     override fun retryEvent() {
         initFeed(true)
-    }
-
-    private fun initFeed(toRetry: Boolean) {
-        feedRepository.initFeed(this, toRetry).onEach { results ->
-            withContext(Dispatchers.Main) {
-                when (results.status) {
-                    LOADING -> _viewEffects._isLoading.value = true
-                    SUCCESS -> {
-                        _viewEffects._isLoading.value = false
-                        _viewState._feed.value = results.data
-                    }
-                    ERROR -> {
-                        _viewEffects._isLoading.value = false
-                        _viewEffects._isError.value = true
-                    }
-                }
-            }
-        }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
     }
 
     override fun onZeroItemsLoaded() {
@@ -70,7 +54,25 @@ class FeedViewModel(
                 when (results.status) {
                     LOADING -> Log.v(LOG_TAG, "onItemEndLoaded LOADING")
                     SUCCESS -> Log.v(LOG_TAG, "onItemEndLoaded SUCCESS")
-                    ERROR -> _viewEffects._isError.value = true
+                    ERROR -> _viewEffect._isError.value = true
+                }
+            }
+        }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
+    }
+
+    private fun initFeed(toRetry: Boolean) {
+        feedRepository.initFeed(this, toRetry).onEach { results ->
+            withContext(Dispatchers.Main) {
+                when (results.status) {
+                    LOADING -> _viewEffect._isLoading.value = true
+                    SUCCESS -> {
+                        _viewEffect._isLoading.value = false
+                        _viewState._feed.value = results.data
+                    }
+                    ERROR -> {
+                        _viewEffect._isLoading.value = false
+                        _viewEffect._isError.value = true
+                    }
                 }
             }
         }.flowOn(Dispatchers.IO).launchIn(viewModelScope)

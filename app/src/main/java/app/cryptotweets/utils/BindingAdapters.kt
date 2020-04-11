@@ -1,4 +1,4 @@
-package app.cryptotweets.Utils
+package app.cryptotweets.utils
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
@@ -26,7 +26,7 @@ fun ImageView.setImageUrl(url: String?) {
 
 private fun ImageView.transformImage(it: RequestBuilder<Drawable>) {
     if (this.id == userImage?.id)
-        it.apply(GlideOptions.circleCropTransform())
+        it.circleCrop()
     else if (this.id == mediaImage?.id)
         it.transform(RoundedCorners(MEDIA_RADIUS_INT))
 }

@@ -1,6 +1,6 @@
 package app.cryptotweets.feed.viewmodel
 
-interface FeedViewEvents {
+interface FeedViewEvent {
     fun swipeToRefreshEvent()
     fun retryEvent()
 }

@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/tweetDetailFragment"
-        android:name="app.cryptotweets.TweetDetailFragment"
+        android:name="app.cryptotweets.feed.TweetDetailFragment"
         android:label="{label}"
         tools:layout="@layout/fragment_tweet_detail">
         <argument

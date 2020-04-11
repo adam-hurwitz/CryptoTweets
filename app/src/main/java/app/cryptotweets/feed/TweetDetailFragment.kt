@@ -1,4 +1,4 @@
-package app.cryptotweets
+package app.cryptotweets.feed
 
 import android.os.Bundle
 import android.view.LayoutInflater

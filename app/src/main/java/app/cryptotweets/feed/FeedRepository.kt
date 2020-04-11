@@ -3,20 +3,20 @@ package app.cryptotweets.feed
 import android.content.SharedPreferences
 import androidx.lifecycle.asFlow
 import androidx.paging.toLiveData
-import app.cryptotweets.Utils.FEED_LIST_ID
-import app.cryptotweets.Utils.FEED_LIST_PAGE_NUM_DEFAULT
-import app.cryptotweets.Utils.FEED_LIST_PAGE_NUM_KEY
-import app.cryptotweets.Utils.FEED_LIST_SIZE
-import app.cryptotweets.Utils.FEED_LIST_TYPE
-import app.cryptotweets.Utils.FEED_PAGEDLIST_SIZE
-import app.cryptotweets.Utils.Resource.Companion.error
-import app.cryptotweets.Utils.Resource.Companion.loading
-import app.cryptotweets.Utils.Resource.Companion.success
+import app.cryptotweets.feed.adapter.PagedListBoundaryCallBack
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.feed.network.FeedService
-import app.cryptotweets.feed.network.PagedListBoundaryCallBack
 import app.cryptotweets.feed.network.RepositoryLoadingCallback
 import app.cryptotweets.feed.room.FeedDao
+import app.cryptotweets.utils.FEED_LIST_ID
+import app.cryptotweets.utils.FEED_LIST_PAGE_NUM_DEFAULT
+import app.cryptotweets.utils.FEED_LIST_PAGE_NUM_KEY
+import app.cryptotweets.utils.FEED_LIST_SIZE
+import app.cryptotweets.utils.FEED_LIST_TYPE
+import app.cryptotweets.utils.FEED_PAGEDLIST_SIZE
+import app.cryptotweets.utils.Resource.Companion.error
+import app.cryptotweets.utils.Resource.Companion.loading
+import app.cryptotweets.utils.Resource.Companion.success
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -39,7 +39,10 @@ class FeedRepository @Inject constructor(
             val tweetsQuery = dao.getAllTweets()
                 .toLiveData(
                     pageSize = FEED_PAGEDLIST_SIZE,
-                    boundaryCallback = PagedListBoundaryCallBack(repositoryLoadingCallback, toRetry)
+                    boundaryCallback = PagedListBoundaryCallBack(
+                        repositoryLoadingCallback,
+                        toRetry
+                    )
                 ).asFlow()
             tweetsQuery.collect { results ->
                 emit(success(results))

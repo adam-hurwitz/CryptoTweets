@@ -5,7 +5,7 @@ import app.cryptotweets.dependencyInjection.DaggerAppComponent
 import app.cryptotweets.dependencyInjection.UtilsModule
 
 class App : Application() {
-    val appComponent = DaggerAppComponent
+    val component = DaggerAppComponent
         .builder()
         .utilsModule(UtilsModule(this))
         .build()

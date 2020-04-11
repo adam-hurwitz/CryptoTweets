@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package app.cryptotweets.Utils
+package app.cryptotweets.utils
 
-import app.cryptotweets.Utils.Status.ERROR
-import app.cryptotweets.Utils.Status.LOADING
-import app.cryptotweets.Utils.Status.SUCCESS
+import app.cryptotweets.utils.Status.ERROR
+import app.cryptotweets.utils.Status.LOADING
+import app.cryptotweets.utils.Status.SUCCESS
 
 /**
  * A generic class that holds a value with its loading status.

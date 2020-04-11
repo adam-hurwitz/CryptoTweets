@@ -1,7 +1,8 @@
-package app.cryptotweets.feed.network
+package app.cryptotweets.feed.adapter
 
 import androidx.paging.PagedList
 import app.cryptotweets.feed.models.Tweet
+import app.cryptotweets.feed.network.RepositoryLoadingCallback
 
 class PagedListBoundaryCallBack(
     val repositoryLoadingCallback: RepositoryLoadingCallback,

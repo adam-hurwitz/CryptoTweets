@@ -1,10 +1,10 @@
 package app.cryptotweets.feed.network
 
-import app.cryptotweets.Utils.LIST_COUNT_QUERY
-import app.cryptotweets.Utils.LIST_ID_QUERY
-import app.cryptotweets.Utils.LIST_PAGE_NUM_QUERY
-import app.cryptotweets.Utils.LIST_TYPE_PATH
 import app.cryptotweets.feed.models.Tweet
+import app.cryptotweets.utils.LIST_COUNT_QUERY
+import app.cryptotweets.utils.LIST_ID_QUERY
+import app.cryptotweets.utils.LIST_PAGE_NUM_QUERY
+import app.cryptotweets.utils.LIST_TYPE_PATH
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

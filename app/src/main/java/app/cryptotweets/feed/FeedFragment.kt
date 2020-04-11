@@ -13,7 +13,8 @@ import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cryptotweets.App
 import app.cryptotweets.R
-import app.cryptotweets.feed.viewmodel.FeedViewEvents
+import app.cryptotweets.feed.adapter.FeedAdapter
+import app.cryptotweets.feed.viewmodel.FeedViewEvent
 import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
@@ -26,7 +27,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     @Inject
     lateinit var repository: FeedRepository
-    lateinit var viewEvents: FeedViewEvents
+    lateinit var viewEvent: FeedViewEvent
     lateinit var adapter: FeedAdapter
 
     @ExperimentalCoroutinesApi
@@ -36,21 +37,21 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (context.applicationContext as App).appComponent.inject(this)
+        (context.applicationContext as App).component.inject(this)
     }
 
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.launchFeedEvents(this)
+        viewModel.launchViewEvents(this)
         initAdapter()
-        initViewState()
+        initViewStates()
         initViewEffects()
         initSwipeToRefresh()
     }
 
-    fun attachViewEvents(viewEvents: FeedViewEvents) {
-        this.viewEvents = viewEvents
+    fun attachViewEvents(viewEvent: FeedViewEvent) {
+        this.viewEvent = viewEvent
     }
 
     private fun initAdapter() {
@@ -60,21 +61,22 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     }
 
     @ExperimentalCoroutinesApi
-    private fun initViewState() {
+    private fun initViewStates() {
         viewModel.viewState.feed.observe(viewLifecycleOwner) { pagedList ->
             adapter.submitList(pagedList)
         }
     }
 
+    @ExperimentalCoroutinesApi
     private fun initViewEffects() {
-        viewModel.viewEffects.isLoading.observe(viewLifecycleOwner) { isLoading ->
+        viewModel.viewEffect.isLoading.observe(viewLifecycleOwner) { isLoading ->
             if (isLoading) progressBar.visibility = VISIBLE
             else {
                 progressBar.visibility = GONE
                 swipeToRefresh.isRefreshing = false
             }
         }
-        viewModel.viewEffects.isError.observe(viewLifecycleOwner) { isError ->
+        viewModel.viewEffect.isError.observe(viewLifecycleOwner) { isError ->
             val snackbar = Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
             snackbar.setAction(R.string.feed_error_retry, onRretryListener())
             val textView =
@@ -85,13 +87,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     }
 
     private fun onRretryListener() = View.OnClickListener {
-        viewEvents.retryEvent()
+        viewEvent.retryEvent()
     }
 
     private fun initSwipeToRefresh() {
         swipeToRefresh.setColorSchemeResources(R.color.colorAccent)
         swipeToRefresh.setOnRefreshListener {
-            viewEvents.swipeToRefreshEvent()
+            viewEvent.swipeToRefreshEvent()
         }
     }
 

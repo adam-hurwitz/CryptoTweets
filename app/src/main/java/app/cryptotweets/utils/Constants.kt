@@ -1,4 +1,4 @@
-package app.cryptotweets.Utils
+package app.cryptotweets.utils
 
 const val AUTHORIZATION_KEY = "Authorization"
 const val CRYPTOTWEETS_DATABASE_NAME = "cryptoTweetsDatabase"
