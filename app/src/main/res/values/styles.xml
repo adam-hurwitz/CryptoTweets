@@ -7,7 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="TweetCellTheme">
+    <style name="RippleEffectTheme">
         <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 

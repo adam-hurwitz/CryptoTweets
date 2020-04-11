@@ -1,4 +1,4 @@
-package app.cryptotweets.feed
+package app.cryptotweets
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,17 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import app.cryptotweets.databinding.FragmentTweetDetailBinding
+import app.cryptotweets.databinding.FragmentProfileBinding
 
-class TweetDetailFragment : Fragment() {
+class ProfileFragment : Fragment() {
 
-    val args: TweetDetailFragmentArgs by navArgs()
+    val args: ProfileFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentTweetDetailBinding.inflate(inflater)
+        val binding = FragmentProfileBinding.inflate(inflater)
         binding.user = args.user
         return binding.root
     }

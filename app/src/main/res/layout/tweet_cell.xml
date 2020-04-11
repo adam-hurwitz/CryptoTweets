@@ -23,16 +23,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_tiniest"
         android:layout_marginBottom="@dimen/margin_tiniest"
-        android:elevation="@dimen/tweet_cell_elevation"
-        android:onClick="@{onClick}">
+        android:elevation="@dimen/tweet_cell_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:focusable="true"
+            android:onClick="@{onClick}"
             android:padding="@dimen/padding_medium"
-            android:theme="@style/TweetCellTheme">
+            android:theme="@style/RippleEffectTheme">
 
             <ImageView
                 android:id="@+id/userImage"
@@ -66,9 +66,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:autoLink="all"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
                 android:onClick="@{onClick}"
                 android:paddingTop="@dimen/padding_small"
                 android:text="@{tweet.text}"
+                android:theme="@style/RippleEffectTheme"
                 app:layout_constraintBottom_toTopOf="@id/mediaImage"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
