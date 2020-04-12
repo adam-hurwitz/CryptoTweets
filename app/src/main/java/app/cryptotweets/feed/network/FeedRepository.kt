@@ -26,7 +26,7 @@ class FeedRepository @Inject constructor(
     private val dao: FeedDao,
     private val service: FeedService
 ) {
-    fun initFeed(pagedListBoundaryCallBack: PagedList.BoundaryCallback<Tweet>) = flow {
+    fun initFeed(boundaryCallBack: PagedList.BoundaryCallback<Tweet>) = flow {
         emit(loading(null))
         // Page number reset when new data request is made.
         sharedPreferences.edit().putInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT).apply()
@@ -36,7 +36,7 @@ class FeedRepository @Inject constructor(
             val tweetsQuery = dao.getAllTweets()
                 .toLiveData(
                     pageSize = FEED_PAGEDLIST_SIZE,
-                    boundaryCallback = pagedListBoundaryCallBack
+                    boundaryCallback = boundaryCallBack
                 ).asFlow()
             tweetsQuery.collect { results ->
                 emit(success(results))
