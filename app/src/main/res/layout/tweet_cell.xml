@@ -36,18 +36,26 @@
 
             <ImageView
                 android:id="@+id/userImage"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/user_image_height"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:contentDescription="@string/user_image_content_description"
                 android:onClick="@{onClick}"
                 android:paddingEnd="@dimen/padding_small"
                 app:imageUrl="@{tweet.user.profile_image_url_https}"
                 app:layout_constraintBottom_toTopOf="@id/tweetText"
+                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/screenName"
+                app:layout_constraintRight_toLeftOf="@id/guideline"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_constraintBottom_toTopOf="@id/tweetText"
                 tools:srcCompat="@tools:sample/avatars" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.20" />
 
             <TextView
                 android:id="@+id/screenName"
@@ -81,12 +89,13 @@
             <ImageView
                 android:id="@+id/mediaImage"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/media_image_height"
+                android:layout_height="0dp"
                 android:layout_marginTop="@dimen/margin_small"
                 android:contentDescription="@string/media_image_content_description"
                 android:visibility="@{tweet.entities.media.get(0).media_url_https != null ? View.VISIBLE : View.GONE}"
                 app:imageUrl="@{tweet.entities.media.get(0).media_url_https}"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="2:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tweetText"

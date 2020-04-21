@@ -29,8 +29,6 @@
 
     <!-- Feed -->
     <dimen name="tweet_cell_elevation">8dp</dimen>
-    <dimen name="user_image_height">48dp</dimen>
-    <dimen name="media_image_height">128dp</dimen>
 
     <!-- Profile -->
     <item name="profile_user_image_guideline_percent" format="float" type="dimen">0.25</item>>
