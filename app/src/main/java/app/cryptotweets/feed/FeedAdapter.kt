@@ -55,7 +55,7 @@ class FeedAdapter(
             )
         when (view.id) {
             R.id.userImage, R.id.screenName -> view.findNavController().navigate(userAction)
-            R.id.card, R.id.tweetText -> {
+            R.id.tweetCard, R.id.tweetText -> {
                 val url = String.format(
                     TWEET_URL_PATTERN, TWEET_BASE_URL,
                     tweet.user.screen_name,
