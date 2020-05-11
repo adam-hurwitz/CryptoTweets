@@ -35,6 +35,7 @@ Sample app displaying cryptocurrency related tweets.
 - [Resource generic][7]
 - [Room database][8]
 - [Kotlin Coroutines Flow][9]
+- [RxJava][14] and [RxKotlin][15]
 - [Data binding][10]
 - [Glide][11]
 - [Paging Library][12]
@@ -51,4 +52,6 @@ Sample app displaying cryptocurrency related tweets.
 [10]:https://developer.android.com/topic/libraries/data-binding
 [11]:https://github.com/bumptech/glide 
 [12]:https://developer.android.com/topic/libraries/architecture/paging
-[13]: https://futurestud.io/tutorials/retrofit-add-custom-request-header
+[13]:https://futurestud.io/tutorials/retrofit-add-custom-request-header
+[14]:https://github.com/ReactiveX/RxJava
+[15]:https://github.com/ReactiveX/RxKotlin 
