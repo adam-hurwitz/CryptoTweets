@@ -14,3 +14,11 @@
 .cxx
 app/src/main/java/app/cryptotweets/Auth.kt
 /app/src/main/java/app/cryptotweets/Auth.kt
+/app/.idea/caches/
+/app/.idea/codeStyles/
+/app/.idea/libraries/
+/app/.idea/
+/app/gradle/wrapper/
+/app/gradlew
+/app/gradlew.bat
+/app/local.properties
