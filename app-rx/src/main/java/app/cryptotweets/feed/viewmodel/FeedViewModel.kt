@@ -55,7 +55,6 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
                     LOADING -> {
                         Log.v(LOG_TAG, "initFeed ${LOADING.name}")
                         _viewEffect._isLoading.onNext(true)
-                        _viewEffect._isLoading.onNext(true)
                     }
                     SUCCESS -> {
                         Log.v(LOG_TAG, "initFeed ${SUCCESS.name}")
