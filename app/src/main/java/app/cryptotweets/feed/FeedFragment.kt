@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cryptotweets.App
@@ -20,6 +21,8 @@ import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 
@@ -62,9 +65,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     @ExperimentalCoroutinesApi
     private fun initViewStates() {
-        viewModel.viewState.feed.observe(viewLifecycleOwner) { pagedList ->
+        viewModel.viewState.feed.onEach { pagedList ->
             adapter.submitList(pagedList)
-        }
+        }.launchIn(lifecycleScope)
     }
 
     @ExperimentalCoroutinesApi
