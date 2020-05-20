@@ -10,7 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cryptotweets.App
 import app.cryptotweets.R
@@ -72,21 +71,22 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     @ExperimentalCoroutinesApi
     private fun initViewEffects() {
-        viewModel.viewEffect.isLoading.observe(viewLifecycleOwner) { isLoading ->
+        viewModel.viewEffect.isLoading.onEach { isLoading ->
             if (isLoading) progressBar.visibility = VISIBLE
             else {
                 progressBar.visibility = GONE
                 swipeToRefresh.isRefreshing = false
             }
-        }
-        viewModel.viewEffect.isError.observe(viewLifecycleOwner) { isError ->
+        }.launchIn(lifecycleScope)
+
+        viewModel.viewEffect.isError.onEach { isError ->
             val snackbar = Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
             snackbar.setAction(R.string.feed_error_retry, onRretryListener())
             val textView =
-                snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+                    snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
             textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             snackbar.show()
-        }
+        }.launchIn(lifecycleScope)
     }
 
     private fun onRretryListener() = View.OnClickListener {

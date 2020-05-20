@@ -37,7 +37,7 @@ android {
 
 dependencies {
     def dagger_version = "2.26"
-    def retrofit_version = "2.7.2"
+    def retrofit_version = "2.9.0"
     def navigation_version = "2.2.1"
     def room_version = "2.2.5"
     def glide_version = "4.11.0"

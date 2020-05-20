@@ -4,19 +4,14 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import app.cryptotweets.feed.network.FeedService
-import app.cryptotweets.utils.AUTHORIZATION_KEY
-import app.cryptotweets.utils.CRYPTOTWEETS_DATABASE_NAME
-import app.cryptotweets.utils.CRYPTOTWEETS_SHARED_PREF
-import app.cryptotweets.utils.CryptoTweetsDatabase
-import app.cryptotweets.utils.TWITTER_API_BASE_URL
-import app.cryptotweets.utils.auth
+import app.cryptotweets.utils.*
 import dagger.Module
 import dagger.Provides
-import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 

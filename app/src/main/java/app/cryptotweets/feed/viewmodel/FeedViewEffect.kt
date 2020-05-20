@@ -1,14 +1,18 @@
 package app.cryptotweets.feed.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 
+@ExperimentalCoroutinesApi
 data class _FeedViewEffect(
-    val _isLoading: MutableLiveData<Boolean> = MutableLiveData(),
-    val _isError: MutableLiveData<Boolean> = MutableLiveData()
+        val _isLoading: MutableStateFlow<Boolean?> = MutableStateFlow(null),
+        val _isError: MutableStateFlow<Boolean?> = MutableStateFlow(null)
 )
 
+@ExperimentalCoroutinesApi
 data class FeedViewEffect(private val _viewEffect: _FeedViewEffect) {
-    val isLoading: LiveData<Boolean> = _viewEffect._isLoading
-    val isError: LiveData<Boolean> = _viewEffect._isError
+    val isLoading: Flow<Boolean> = _viewEffect._isLoading.filterNotNull()
+    val isError: Flow<Boolean> = _viewEffect._isError.filterNotNull()
 }

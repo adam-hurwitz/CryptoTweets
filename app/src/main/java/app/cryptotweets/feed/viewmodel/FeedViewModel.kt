@@ -7,15 +7,12 @@ import androidx.paging.PagedList
 import app.cryptotweets.feed.FeedFragment
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.feed.network.FeedRepository
-import app.cryptotweets.utils.Status.ERROR
-import app.cryptotweets.utils.Status.LOADING
-import app.cryptotweets.utils.Status.SUCCESS
+import app.cryptotweets.utils.Status.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.withContext
 
 @ExperimentalCoroutinesApi
 class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), FeedViewEvent {
@@ -45,41 +42,37 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
 
     private fun initFeed(toRetry: Boolean) {
         feedRepository.initFeed(pagedListBoundaryCallback(toRetry)).onEach { results ->
-            withContext(Dispatchers.Main) {
-                when (results.status) {
-                    LOADING -> _viewEffect._isLoading.value = true
-                    SUCCESS -> {
-                        _viewEffect._isLoading.value = false
-                        _viewState._feed.value = results.data
-                    }
-                    ERROR -> {
-                        _viewEffect._isLoading.value = false
-                        _viewEffect._isError.value = true
-                    }
+            when (results.status) {
+                LOADING -> _viewEffect._isLoading.value = true
+                SUCCESS -> {
+                    _viewEffect._isLoading.value = false
+                    _viewState._feed.value = results.data
+                }
+                ERROR -> {
+                    _viewEffect._isLoading.value = false
+                    _viewEffect._isError.value = true
                 }
             }
         }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
     }
 
     private fun pagedListBoundaryCallback(toRetry: Boolean) =
-        object : PagedList.BoundaryCallback<Tweet>() {
+            object : PagedList.BoundaryCallback<Tweet>() {
 
-            override fun onZeroItemsLoaded() {
-                super.onZeroItemsLoaded()
-                if (toRetry) initFeed(false)
-            }
+                override fun onZeroItemsLoaded() {
+                    super.onZeroItemsLoaded()
+                    if (toRetry) initFeed(false)
+                }
 
-            override fun onItemAtEndLoaded(itemAtEnd: Tweet) {
-                super.onItemAtEndLoaded(itemAtEnd)
-                feedRepository.loadMoreFeed().onEach { results ->
-                    withContext(Dispatchers.Main) {
+                override fun onItemAtEndLoaded(itemAtEnd: Tweet) {
+                    super.onItemAtEndLoaded(itemAtEnd)
+                    feedRepository.loadMoreFeed().onEach { results ->
                         when (results.status) {
                             LOADING -> Log.v(LOG_TAG, "onItemEndLoaded LOADING")
                             SUCCESS -> Log.v(LOG_TAG, "onItemEndLoaded SUCCESS")
                             ERROR -> _viewEffect._isError.value = true
                         }
-                    }
-                }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
+                    }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
+                }
             }
-        }
 }
