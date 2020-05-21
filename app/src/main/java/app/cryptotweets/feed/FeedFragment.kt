@@ -20,6 +20,7 @@ import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -64,14 +65,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     @ExperimentalCoroutinesApi
     private fun initViewStates() {
-        viewModel.viewState.feed.onEach { pagedList ->
+        viewModel.viewState.feed.distinctUntilChanged().onEach { pagedList ->
             adapter.submitList(pagedList)
         }.launchIn(lifecycleScope)
     }
 
     @ExperimentalCoroutinesApi
     private fun initViewEffects() {
-        viewModel.viewEffect.isLoading.onEach { isLoading ->
+        viewModel.viewEffect.isLoading.distinctUntilChanged().onEach { isLoading ->
             if (isLoading) progressBar.visibility = VISIBLE
             else {
                 progressBar.visibility = GONE
@@ -79,7 +80,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             }
         }.launchIn(lifecycleScope)
 
-        viewModel.viewEffect.isError.onEach { isError ->
+        viewModel.viewEffect.isError.distinctUntilChanged().onEach { isError ->
             val snackbar = Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
             snackbar.setAction(R.string.feed_error_retry, onRretryListener())
             val textView =
