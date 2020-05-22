@@ -8,9 +8,7 @@ import app.cryptotweets.feed.FeedFragment
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.feed.network.FeedRepository
 import app.cryptotweets.utils.Status.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -53,7 +51,7 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
                     _viewEffect._isError.value = true
                 }
             }
-        }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
+        }.launchIn(viewModelScope)
     }
 
     private fun pagedListBoundaryCallback(toRetry: Boolean) =
@@ -72,7 +70,7 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
                             SUCCESS -> Log.v(LOG_TAG, "onItemEndLoaded SUCCESS")
                             ERROR -> _viewEffect._isError.value = true
                         }
-                    }.flowOn(Dispatchers.IO).launchIn(viewModelScope)
+                    }.launchIn(viewModelScope)
                 }
             }
 }
