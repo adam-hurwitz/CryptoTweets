@@ -1,14 +1,14 @@
 package app.cryptotweets.feed.viewmodel
 
 import app.cryptotweets.utils.Event
-import io.reactivex.rxjava3.subjects.ReplaySubject
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 data class _FeedViewEffect(
-    val _isLoading: ReplaySubject<Event<Boolean>> = ReplaySubject.create(),
-    val _isError: ReplaySubject<Event<Boolean>> = ReplaySubject.create()
+        val _isLoading: BehaviorSubject<Event<Boolean>> = BehaviorSubject.create(),
+        val _isError: BehaviorSubject<Event<Boolean>> = BehaviorSubject.create()
 )
 
 data class FeedViewEffect(private val _viewEffect: _FeedViewEffect) {
-    val isLoading: ReplaySubject<Event<Boolean>> = _viewEffect._isLoading
-    val isError: ReplaySubject<Event<Boolean>> = _viewEffect._isError
+    val isLoading: BehaviorSubject<Event<Boolean>> = _viewEffect._isLoading
+    val isError: BehaviorSubject<Event<Boolean>> = _viewEffect._isError
 }
