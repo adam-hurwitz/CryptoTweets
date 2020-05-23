@@ -92,8 +92,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError { Log.v(LOG_TAG, "Error loading isLoading") }
             .subscribe { isLoading ->
-                if (isLoading) progressBar.visibility = VISIBLE
-                else {
+                if (isLoading.getContentIfNotHandled() == true) {
+                    progressBar.visibility = VISIBLE
+                } else {
                     progressBar.visibility = GONE
                     swipeToRefresh.isRefreshing = false
                 }
@@ -103,13 +104,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             .observeOn(AndroidSchedulers.mainThread())
             .doOnError { Log.v(LOG_TAG, "Error loading isError") }
             .subscribe { isError ->
-                val snackbar =
-                    Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
-                snackbar.setAction(R.string.feed_error_retry, onRretryListener())
-                val textView =
-                    snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-                textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-                snackbar.show()
+                if (isError.getContentIfNotHandled() == true) {
+                    val snackbar =
+                            Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
+                    snackbar.setAction(R.string.feed_error_retry, onRretryListener())
+                    val textView =
+                            snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+                    snackbar.show()
+                }
             }
         compositeDisposable.addAll(isLoadingDisposable, isErrorDisposable)
     }
