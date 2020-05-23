@@ -42,13 +42,13 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
     private fun initFeed(toRetry: Boolean) {
         feedRepository.initFeed(pagedListBoundaryCallback(toRetry)).onEach { results ->
             when (results.status) {
-                LOADING -> _viewEffect._isLoading.value = true
+                LOADING -> _viewEffect._isLoading.value = Event(true)
                 SUCCESS -> {
-                    _viewEffect._isLoading.value = false
+                    _viewEffect._isLoading.value = Event(false)
                     _viewState._feed.value = results.data
                 }
                 ERROR -> {
-                    _viewEffect._isLoading.value = false
+                    _viewEffect._isLoading.value = Event(false)
                     _viewEffect._isError.value = Event(true)
                 }
             }

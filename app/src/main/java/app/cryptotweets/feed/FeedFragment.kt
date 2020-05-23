@@ -3,8 +3,7 @@ package app.cryptotweets.feed
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -72,8 +71,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     @ExperimentalCoroutinesApi
     private fun initViewEffects() {
         viewModel.viewEffect.isLoading.onEach { isLoading ->
-            if (isLoading) progressBar.visibility = VISIBLE
-            else {
+            if (isLoading.getContentIfNotHandled() == true) {
+                progressBar.visibility = VISIBLE
+            } else {
                 progressBar.visibility = GONE
                 swipeToRefresh.isRefreshing = false
             }
@@ -91,7 +91,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         }.launchIn(lifecycleScope)
     }
 
-    private fun onRretryListener() = View.OnClickListener {
+    private fun onRretryListener() = OnClickListener {
         viewEvent.retryEvent()
     }
 
