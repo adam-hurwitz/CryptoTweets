@@ -7,6 +7,7 @@ import androidx.paging.PagedList
 import app.cryptotweets.feed.FeedFragment
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.feed.network.FeedRepository
+import app.cryptotweets.utils.Event
 import app.cryptotweets.utils.Status.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
@@ -48,7 +49,7 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
                 }
                 ERROR -> {
                     _viewEffect._isLoading.value = false
-                    _viewEffect._isError.value = true
+                    _viewEffect._isError.value = Event(true)
                 }
             }
         }.launchIn(viewModelScope)
@@ -68,7 +69,7 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
                         when (results.status) {
                             LOADING -> Log.v(LOG_TAG, "onItemEndLoaded LOADING")
                             SUCCESS -> Log.v(LOG_TAG, "onItemEndLoaded SUCCESS")
-                            ERROR -> _viewEffect._isError.value = true
+                            ERROR -> _viewEffect._isError.value = Event(true)
                         }
                     }.launchIn(viewModelScope)
                 }

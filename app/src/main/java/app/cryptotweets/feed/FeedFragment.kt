@@ -80,12 +80,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         }.launchIn(lifecycleScope)
 
         viewModel.viewEffect.isError.onEach { isError ->
-            val snackbar = Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
-            snackbar.setAction(R.string.feed_error_retry, onRretryListener())
-            val textView =
-                    snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-            textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-            snackbar.show()
+            if (isError.getContentIfNotHandled() == true) {
+                val snackbar = Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
+                snackbar.setAction(R.string.feed_error_retry, onRretryListener())
+                val textView =
+                        snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+                textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+                snackbar.show()
+            }
         }.launchIn(lifecycleScope)
     }
 
