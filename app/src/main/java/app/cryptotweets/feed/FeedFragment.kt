@@ -16,6 +16,7 @@ import app.cryptotweets.feed.network.FeedRepository
 import app.cryptotweets.feed.viewmodel.FeedViewEvent
 import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
+import app.cryptotweets.utils.onEachEvent
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -70,8 +71,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     @ExperimentalCoroutinesApi
     private fun initViewEffects() {
-        viewModel.viewEffect.isLoading.onEach { isLoading ->
-            if (isLoading.getContentIfNotHandled() == true) {
+        viewModel.viewEffect.isLoading.onEachEvent { isLoading ->
+            if (isLoading == true) {
                 progressBar.visibility = VISIBLE
             } else {
                 progressBar.visibility = GONE
@@ -79,15 +80,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             }
         }.launchIn(lifecycleScope)
 
-        viewModel.viewEffect.isError.onEach { isError ->
-            if (isError.getContentIfNotHandled() == true) {
-                val snackbar = Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
-                snackbar.setAction(R.string.feed_error_retry, onRretryListener())
-                val textView =
-                        snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-                textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-                snackbar.show()
-            }
+        viewModel.viewEffect.isError.onEachEvent {
+            val snackbar = Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
+            snackbar.setAction(R.string.feed_error_retry, onRretryListener())
+            val textView =
+                    snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+            textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+            snackbar.show()
         }.launchIn(lifecycleScope)
     }
 
