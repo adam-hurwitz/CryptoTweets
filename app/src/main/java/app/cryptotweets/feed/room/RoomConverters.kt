@@ -4,7 +4,7 @@ import androidx.room.TypeConverter
 import app.cryptotweets.feed.models.entities.Media
 import com.google.gson.Gson
 
-class Converters {
+class RoomConverters {
 
     @TypeConverter
     fun toMediaString(value: List<Media>?) = Gson().toJson(value)

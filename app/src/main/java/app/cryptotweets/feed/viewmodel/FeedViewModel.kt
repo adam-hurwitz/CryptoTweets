@@ -8,7 +8,9 @@ import app.cryptotweets.feed.FeedFragment
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.feed.network.FeedRepository
 import app.cryptotweets.utils.Event
-import app.cryptotweets.utils.Status.*
+import app.cryptotweets.utils.Status.ERROR
+import app.cryptotweets.utils.Status.LOADING
+import app.cryptotweets.utils.Status.SUCCESS
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

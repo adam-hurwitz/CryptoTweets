@@ -8,9 +8,6 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
 
-    // ViewModel support: init with 'by' delegate
-    kotlinOptions { jvmTarget = '1.8' }
-
     defaultConfig {
         applicationId "app.cryptotweets"
         minSdkVersion 21
@@ -28,8 +25,15 @@ android {
         }
     }
 
-    // Retrofit support: 'Invoke-customs are only supported starting with Android O (--min-api 26)'
+    // Retrofit support for error: 'Invoke-customs are only supported starting with Android O (--min-api 26)'
+    // See: https://stackoverflow.com/questions/49891730/invoke-customs-are-only-supported-starting-with-android-0-min-api-26/50198499#50198499
     compileOptions { targetCompatibility JavaVersion.VERSION_1_8 }
+
+    // ViewModel support init with 'by' delegate error: "Cannot inline bytecode built with JVM
+    // target 1.8 into bytecode that is being built with JVM target 1.6. Please specify proper
+    // '-jvm-target' option"
+    // See: https://stackoverflow.com/a/57969464/2253682
+    kotlinOptions { jvmTarget = '1.8' }
 
     dataBinding.enabled = true
 
