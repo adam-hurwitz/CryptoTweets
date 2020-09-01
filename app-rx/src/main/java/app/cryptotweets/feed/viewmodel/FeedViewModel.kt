@@ -81,9 +81,10 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
             override fun onItemAtEndLoaded(itemAtEnd: Tweet) {
                 super.onItemAtEndLoaded(itemAtEnd)
                 val disposable = feedRepository.loadMoreFeed()
-                    .observeOn(Schedulers.io())
-                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { results ->
+                        println("Thread onItemAtEndLoaded ${Thread.currentThread().name}")
                         when (results.status) {
                             LOADING -> Log.v(LOG_TAG, "onItemEndLoaded LOADING")
                             SUCCESS -> Log.v(LOG_TAG, "onItemEndLoaded SUCCESS")
