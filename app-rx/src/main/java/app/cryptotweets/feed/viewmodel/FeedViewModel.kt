@@ -7,7 +7,9 @@ import app.cryptotweets.feed.FeedFragment
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.feed.network.FeedRepository
 import app.cryptotweets.utils.Event
-import app.cryptotweets.utils.Status.*
+import app.cryptotweets.utils.Status.ERROR
+import app.cryptotweets.utils.Status.LOADING
+import app.cryptotweets.utils.Status.SUCCESS
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -47,8 +49,6 @@ class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), F
 
     private fun initFeed(toRetry: Boolean) {
         val disposable = feedRepository.initFeed(pagedListBoundaryCallback(toRetry))
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe { results ->
                 when (results.status) {
                     LOADING -> {

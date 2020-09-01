@@ -18,10 +18,11 @@ import app.cryptotweets.feed.viewmodel.FeedViewEvent
 import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_feed.*
+import kotlinx.android.synthetic.main.fragment_feed.feed
+import kotlinx.android.synthetic.main.fragment_feed.progressBar
+import kotlinx.android.synthetic.main.fragment_feed.recyclerView
+import kotlinx.android.synthetic.main.fragment_feed.swipeToRefresh
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
@@ -76,8 +77,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     @ExperimentalCoroutinesApi
     private fun initViewStates() {
         val disposable = viewModel.viewState.feed
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .doOnError { Log.v(LOG_TAG, "Error loading pagedList") }
             .subscribe { pagedList ->
                 adapter.submitList(pagedList)
@@ -88,8 +87,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     @ExperimentalCoroutinesApi
     private fun initViewEffects() {
         val isLoadingDisposable = viewModel.viewEffect.isLoading
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .doOnError { Log.v(LOG_TAG, "Error loading isLoading") }
             .subscribe { isLoading ->
                 if (isLoading.getContentIfNotHandled() == true) {
@@ -100,8 +97,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 }
             }
         val isErrorDisposable = viewModel.viewEffect.isError
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .doOnError { Log.v(LOG_TAG, "Error loading isError") }
             .subscribe { isError ->
                 if (isError.getContentIfNotHandled() == true) {
