@@ -9,10 +9,9 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
+            <option value="$PROJECT_DIR$/.." />
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/app-rx" />
-            <option value="$PROJECT_DIR$/app-simple" />
+            <option value="$PROJECT_DIR$/../app-rx" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

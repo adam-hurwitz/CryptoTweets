@@ -1,2 +1,2 @@
 rootProject.name='CryptoTweets'
-include ':app', ':app-rx'
+include ':app', ':app-rx', ':app-simple'

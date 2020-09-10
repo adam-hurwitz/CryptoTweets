@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">CryptoTweets</string>
+    <string name="screen_name_at">\@%s</string>
+    <string name="user_image_content_description">User image</string>
+    <string name="media_image_content_description">Tweet image</string>
+    <string name="twitter_date_time_format">EEE MMM dd HH:mm:ss ZZZZZ yyyy</string>
+    <string name="cryptotweets_date_time_format">h:mm a MMM d</string>
+    <string name="feed_error_message">Error loading feed.</string>
+    <string name="feed_error_retry">Retry!</string>
+    <string name="user_profile_title">User profile title</string>
+    <string name="user_profile_some_info">Some info about the user.</string>
+</resources>

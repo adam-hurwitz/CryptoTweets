@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="onClick"
+            type="android.view.View.OnClickListener" />
+
+        <variable
+            name="tweet"
+            type="app.cryptotweets.feed.models.Tweet" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_tiniest"
+        android:layout_marginBottom="@dimen/margin_tiniest"
+        android:elevation="@dimen/tweet_cell_elevation">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tweetCard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:onClick="@{onClick}"
+            android:padding="@dimen/padding_medium"
+            android:theme="@style/RippleEffectTheme">
+
+            <ImageView
+                android:id="@+id/userImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/user_image_content_description"
+                android:onClick="@{onClick}"
+                android:paddingEnd="@dimen/padding_small"
+                app:imageUrl="@{tweet.user.profile_image_url_https}"
+                app:layout_constraintBottom_toTopOf="@id/tweetText"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/guideline"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_constraintBottom_toTopOf="@id/tweetText"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.20" />
+
+            <TextView
+                android:id="@+id/screenName"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:onClick="@{onClick}"
+                android:text='@{String.format(@string/screen_name_at, tweet.user.screen_name)}'
+                app:layout_constraintBottom_toBottomOf="@id/userImage"
+                app:layout_constraintLeft_toRightOf="@id/userImage"
+                app:layout_constraintTop_toTopOf="@id/userImage"
+                tools:text="\@screenName" />
+
+            <TextView
+                android:id="@+id/tweetText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:onClick="@{onClick}"
+                android:paddingTop="@dimen/padding_small"
+                android:text="@{tweet.text}"
+                android:theme="@style/RippleEffectTheme"
+                app:layout_constraintBottom_toTopOf="@id/mediaImage"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/userImage"
+                tools:text="Tweet text here." />
+
+            <ImageView
+                android:id="@+id/mediaImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:contentDescription="@string/media_image_content_description"
+                android:visibility="@{tweet.entities.media.get(0).media_url_https != null ? View.VISIBLE : View.GONE}"
+                app:imageUrl="@{tweet.entities.media.get(0).media_url_https}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="2:1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tweetText"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:timestamp="@{tweet.created_at}"
+                tools:text="January, 1, 1999" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

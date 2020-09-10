@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../CryptoTweets.iml" filepath="$PROJECT_DIR$/../CryptoTweets.iml" group="CryptoTweets" />
+      <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" group="CryptoTweets/app" />
+      <module fileurl="file://$PROJECT_DIR$/../app-rx/app-rx.iml" filepath="$PROJECT_DIR$/../app-rx/app-rx.iml" group="CryptoTweets/app-rx" />
+    </modules>
+  </component>
+</project>
