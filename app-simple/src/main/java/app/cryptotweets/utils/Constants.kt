@@ -25,4 +25,4 @@ const val LIST_PAGE_NUM_QUERY = "page"
 
 // Feed PagedList
 const val FEED_PAGEDLIST_SIZE = 18
-const val MEDIA_RADIUS_INT = 112
+const val MEDIA_RADIUS_INT = 16F
