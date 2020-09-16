@@ -8,7 +8,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object Injection {
-    fun provideFeedService() = Retrofit.Builder()
+    /** Use Dagger dependency injection module singleton in production */
+    val feedService = Retrofit.Builder()
         .baseUrl(TWITTER_API_BASE_URL)
         .client(providesOkHttpClient())
         .addConverterFactory(GsonConverterFactory.create())

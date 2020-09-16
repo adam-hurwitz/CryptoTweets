@@ -21,10 +21,6 @@ class FeedViewModel(private val repository: FeedRepository) : ViewModel() {
     val feed: Flow<PagingData<Tweet>> = _feed.filterNotNull()
 
     init {
-        initFeed()
-    }
-
-    private fun initFeed() {
         repository.initFeed().cachedIn(viewModelScope).onEach {
             _feed.value = it
         }.launchIn(viewModelScope)

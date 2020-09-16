@@ -12,7 +12,7 @@ class FeedPagingSource : PagingSource<Int, Tweet>() {
         try {
             val page = params.key ?: 1
             val nextPage = page + 1
-            val tweets = Injection.provideFeedService().getTweets(
+            val tweets = Injection.feedService.getTweets(
                 listType = FEED_LIST_TYPE,
                 listId = FEED_LIST_ID,
                 count = FEED_LIST_SIZE,

@@ -6,7 +6,7 @@ import app.cryptotweets.utils.FEED_PAGEDLIST_SIZE
 
 class FeedRepository {
     fun initFeed() = Pager(
-        config = PagingConfig(pageSize = FEED_PAGEDLIST_SIZE, enablePlaceholders = true),
+        config = PagingConfig(pageSize = FEED_PAGEDLIST_SIZE),
         pagingSourceFactory = { FeedPagingSource() }
     ).flow
 }
