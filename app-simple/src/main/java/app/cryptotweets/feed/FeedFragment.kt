@@ -12,9 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cryptotweets.R
-import app.cryptotweets.feed.network.FeedRepository
-import app.cryptotweets.feed.viewmodel.FeedViewModel
-import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.feed
 import kotlinx.android.synthetic.main.fragment_feed.progressBar
@@ -27,19 +24,8 @@ import kotlinx.coroutines.flow.onEach
 @ExperimentalCoroutinesApi
 class FeedFragment : Fragment(R.layout.fragment_feed) {
 
-    lateinit var viewModel: FeedViewModel
+    private val viewModel: FeedViewModel by viewModels()
     lateinit var adapter: FeedAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val viewModel: FeedViewModel by viewModels {
-            FeedViewModelFactory(
-                owner = this,
-                feedRepository = FeedRepository()
-            )
-        }
-        this.viewModel = viewModel
-    }
 
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

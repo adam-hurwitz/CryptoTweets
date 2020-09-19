@@ -1,4 +1,4 @@
-package app.cryptotweets.feed.viewmodel
+package app.cryptotweets.feed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,8 +13,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @ExperimentalCoroutinesApi
-class FeedViewModel(private val repository: FeedRepository) : ViewModel() {
+class FeedViewModel : ViewModel() {
     val LOG_TAG = FeedViewModel::class.java.simpleName
+
+    private val repository = FeedRepository()
 
     val feed get() = _feed.filterNotNull()
     private val _feed: MutableStateFlow<PagingData<Tweet>?> = MutableStateFlow(null)
