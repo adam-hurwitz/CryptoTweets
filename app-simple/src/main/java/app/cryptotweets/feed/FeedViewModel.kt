@@ -19,7 +19,7 @@ class FeedViewModel : ViewModel() {
     private val repository = FeedRepository()
 
     val feed get() = _feed.filterNotNull()
-    private val _feed: MutableStateFlow<PagingData<Tweet>?> = MutableStateFlow(null)
+    private val _feed: MutableStateFlow<PagingData<Tweet>> = MutableStateFlow(PagingData.empty())
 
     init {
         repository.initFeed().cachedIn(viewModelScope).onEach {
