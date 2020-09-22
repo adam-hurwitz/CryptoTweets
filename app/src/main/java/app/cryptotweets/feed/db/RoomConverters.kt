@@ -1,4 +1,4 @@
-package app.cryptotweets.feed.room
+package app.cryptotweets.feed.db
 
 import androidx.room.TypeConverter
 import app.cryptotweets.feed.models.entities.Media

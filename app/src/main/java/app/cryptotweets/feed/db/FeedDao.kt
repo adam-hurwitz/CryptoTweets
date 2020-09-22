@@ -1,6 +1,6 @@
-package app.cryptotweets.feed.room
+package app.cryptotweets.feed.db
 
-import androidx.paging.DataSource
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -14,5 +14,8 @@ interface FeedDao {
     suspend fun addTweets(tweets: List<Tweet>?)
 
     @Query("SELECT * FROM feed ORDER BY tweetId DESC")
-    fun getAllTweets(): DataSource.Factory<Int, Tweet>
+    fun getAllTweets(): PagingSource<Int, Tweet>
+
+    @Query("DELETE FROM feed")
+    suspend fun clearTweets()
 }

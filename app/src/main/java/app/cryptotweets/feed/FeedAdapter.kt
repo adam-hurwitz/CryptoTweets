@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.findNavController
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import app.cryptotweets.R
@@ -25,7 +25,7 @@ val DIFF_UTIL = object : DiffUtil.ItemCallback<Tweet>() {
 
 class FeedAdapter(
     val context: Context
-) : PagedListAdapter<Tweet, FeedAdapter.ViewHolder>(DIFF_UTIL) {
+) : PagingDataAdapter<Tweet, FeedAdapter.ViewHolder>(DIFF_UTIL) {
 
     class ViewHolder(private val binding: TweetCellBinding) :
         RecyclerView.ViewHolder(binding.root) {

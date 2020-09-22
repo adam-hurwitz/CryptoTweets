@@ -7,6 +7,7 @@ buildscript {
     ext.navigation_safe_args_version = '2.2.1'
     ext.paging_version = '2.1.2'
     ext.paging_version_alpha = '3.0.0-alpha06'
+    ext.room_alpha_version = '2.3.0-alpha02'
     repositories {
         google()
         jcenter()

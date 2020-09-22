@@ -2,34 +2,34 @@ package app.cryptotweets.feed
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.view.View.*
+import android.view.View.OnClickListener
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cryptotweets.App
 import app.cryptotweets.R
 import app.cryptotweets.feed.network.FeedRepository
-import app.cryptotweets.feed.viewmodel.FeedViewEvent
 import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
-import app.cryptotweets.utils.onEachEvent
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_feed.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
+import androidx.core.view.isVisible
 
-
-class FeedFragment : Fragment(R.layout.fragment_feed) {
+class FeedFragment : Fragment() {
 
     @Inject
     lateinit var repository: FeedRepository
-    lateinit var viewEvent: FeedViewEvent
+    lateinit var binding: app.cryptotweets.databinding.FragmentFeedBinding
     lateinit var adapter: FeedAdapter
 
     @ExperimentalCoroutinesApi
@@ -42,63 +42,63 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         (context.applicationContext as App).component.inject(this)
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding =
+            app.cryptotweets.databinding.FragmentFeedBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.launchViewEvents(this)
         initAdapter()
         initViewStates()
-        initViewEffects()
         initSwipeToRefresh()
-    }
-
-    fun attachViewEvents(viewEvent: FeedViewEvent) {
-        this.viewEvent = viewEvent
     }
 
     private fun initAdapter() {
         adapter = FeedAdapter(requireContext())
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.adapter = adapter
     }
 
     @ExperimentalCoroutinesApi
     private fun initViewStates() {
         viewModel.viewState.feed.onEach { pagedList ->
-            adapter.submitList(pagedList)
+            adapter.submitData(pagedList)
         }.launchIn(lifecycleScope)
-    }
-
-    @ExperimentalCoroutinesApi
-    private fun initViewEffects() {
-        viewModel.viewEffect.isLoading.onEachEvent { isLoading ->
-            if (isLoading == true) {
-                progressBar.visibility = VISIBLE
-            } else {
-                progressBar.visibility = GONE
-                swipeToRefresh.isRefreshing = false
-            }
-        }.launchIn(lifecycleScope)
-
-        viewModel.viewEffect.isError.onEachEvent {
-            val snackbar = Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
-            snackbar.setAction(R.string.feed_error_retry, onRretryListener())
-            val textView =
+        adapter.addLoadStateListener { loadState ->
+            binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+            binding.swipeToRefresh.isRefreshing =
+                loadState.source.append is LoadState.Loading
+                        && loadState.source.refresh is LoadState.Loading
+            val errorState = loadState.source.refresh as? LoadState.Error
+            errorState?.let {
+                val snackbar = Snackbar.make(
+                    binding.feed,
+                    R.string.feed_error_message,
+                    Snackbar.LENGTH_LONG
+                )
+                snackbar.setAction(R.string.feed_error_retry, onRetryListener())
+                val textView =
                     snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-            textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
-            snackbar.show()
-        }.launchIn(lifecycleScope)
+                textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+                snackbar.show()
+            }
+        }
     }
 
-    private fun onRretryListener() = OnClickListener {
-        viewEvent.retryEvent()
+    private fun onRetryListener() = OnClickListener {
+        adapter.retry()
     }
 
     private fun initSwipeToRefresh() {
-        swipeToRefresh.setColorSchemeResources(R.color.colorAccent)
-        swipeToRefresh.setOnRefreshListener {
-            viewEvent.swipeToRefreshEvent()
-        }
+        binding.swipeToRefresh.setColorSchemeResources(R.color.colorAccent)
+        binding.swipeToRefresh.setOnRefreshListener { adapter.refresh() }
     }
 
 }
