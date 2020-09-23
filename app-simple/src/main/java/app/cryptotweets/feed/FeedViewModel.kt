@@ -27,7 +27,7 @@ class FeedViewModel : ViewModel() {
 
     init {
         repository.initFeed().cachedIn(viewModelScope).onEach { pagingData ->
-            val feed = pagingData.map {
+            _feed.value = pagingData.map {
                 FeedCell.TweetCell(it)
             }.insertSeparators { before, after ->
                 if (before == null) return@insertSeparators null // Beginning of the list
@@ -39,7 +39,6 @@ class FeedViewModel : ViewModel() {
                     else return@insertSeparators null
                 }
             }
-            _feed.value = feed
         }.launchIn(viewModelScope)
     }
 }
