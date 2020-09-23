@@ -36,7 +36,7 @@ class FeedAdapter(
                 (oldItem is FeedCell.TweetCell && newItem is FeedCell.TweetCell
                         && oldItem.tweet.id == newItem.tweet.id)
                         || (oldItem is FeedCell.TopTweetCell && newItem is FeedCell.TopTweetCell
-                        && oldItem.text == newItem.text)
+                        && oldItem.textResource == newItem.textResource)
 
             override fun areContentsTheSame(oldItem: FeedCell, newItem: FeedCell) =
                 oldItem == newItem
@@ -81,8 +81,11 @@ class FeedAdapter(
     class TopTweetViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val topTweetTextView = view.findViewById<TextView>(R.id.topTweetText)
 
-        fun bind(topTweetText: String) {
-            topTweetTextView.text = topTweetText
+        fun bind(context: Context, topTweetCell: FeedCell.TopTweetCell) {
+            topTweetTextView.text = String.format(
+                context.getString(R.string.top_tweet_text),
+                topTweetCell.favoriteCount
+            )
         }
     }
 
@@ -114,7 +117,7 @@ class FeedAdapter(
                     it.tweet,
                     onClickListener(it.tweet)
                 )
-                is FeedCell.TopTweetCell -> (holder as TopTweetViewHolder).bind(it.text)
+                is FeedCell.TopTweetCell -> (holder as TopTweetViewHolder).bind(context, it)
             }
         }
     }

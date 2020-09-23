@@ -6,8 +6,10 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
+import app.cryptotweets.R
 import app.cryptotweets.feed.adapter.FeedCell
 import app.cryptotweets.feed.network.FeedRepository
+import app.cryptotweets.utils.TOP_TWEETS_FAVORITE_THRESHOLD
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -32,8 +34,8 @@ class FeedViewModel : ViewModel() {
                 else if (after == null) return@insertSeparators null // End of the list
                 else {
                     val favorites = before.tweet.favorite_count
-                    if (favorites > 10)
-                        FeedCell.TopTweetCell("This is a top tweet with ${favorites} ❤️s.")
+                    if (favorites > TOP_TWEETS_FAVORITE_THRESHOLD)
+                        FeedCell.TopTweetCell(R.string.top_tweet_text, favorites)
                     else return@insertSeparators null
                 }
             }
