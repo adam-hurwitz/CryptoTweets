@@ -7,5 +7,6 @@ data class Tweet(
     val created_at: String,
     val text: String,
     val user: User,
-    val entities: Entities
+    val entities: Entities,
+    val favorite_count: Int
 )

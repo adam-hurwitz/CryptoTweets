@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import app.cryptotweets.R
+import app.cryptotweets.feed.adapter.FeedAdapter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_feed.feed
 import kotlinx.android.synthetic.main.fragment_feed.progressBar

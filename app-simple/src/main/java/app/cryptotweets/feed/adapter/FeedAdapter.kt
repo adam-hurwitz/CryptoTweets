@@ -1,4 +1,4 @@
-package app.cryptotweets.feed
+package app.cryptotweets.feed.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -15,6 +15,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import app.cryptotweets.R
+import app.cryptotweets.feed.FeedFragmentDirections
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.utils.MEDIA_RADIUS_INT
 import app.cryptotweets.utils.TWEET_BASE_URL
@@ -27,16 +28,22 @@ import coil.transform.RoundedCornersTransformation
 
 class FeedAdapter(
     private val context: Context
-) : PagingDataAdapter<Tweet, FeedAdapter.ViewHolder>(DIFF_UTIL) {
+) : PagingDataAdapter<FeedCell, RecyclerView.ViewHolder>(DIFF_UTIL) {
 
     companion object {
-        private val DIFF_UTIL = object : DiffUtil.ItemCallback<Tweet>() {
-            override fun areItemsTheSame(oldItem: Tweet, newItem: Tweet) = oldItem.id == newItem.id
-            override fun areContentsTheSame(oldItem: Tweet, newItem: Tweet) = oldItem == newItem
+        private val DIFF_UTIL = object : DiffUtil.ItemCallback<FeedCell>() {
+            override fun areItemsTheSame(oldItem: FeedCell, newItem: FeedCell) =
+                (oldItem is FeedCell.TweetCell && newItem is FeedCell.TweetCell
+                        && oldItem.tweet.id == newItem.tweet.id)
+                        || (oldItem is FeedCell.TopTweetCell && newItem is FeedCell.TopTweetCell
+                        && oldItem.text == newItem.text)
+
+            override fun areContentsTheSame(oldItem: FeedCell, newItem: FeedCell) =
+                oldItem == newItem
         }
     }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class TweetViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tweetCard = view.findViewById<ConstraintLayout>(R.id.tweetCard)
         val userImage = view.findViewById<ImageView>(R.id.userImage)
         val screenName = view.findViewById<TextView>(R.id.screenName)
@@ -71,16 +78,44 @@ class FeedAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.tweet_cell, parent, false)
-        return ViewHolder(view)
+    class TopTweetViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val topTweetTextView = view.findViewById<TextView>(R.id.topTweetText)
+
+        fun bind(topTweetText: String) {
+            topTweetTextView.text = topTweetText
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun getItemViewType(position: Int) = when (getItem(position)) {
+        is FeedCell.TweetCell -> R.layout.cell_tweet
+        is FeedCell.TopTweetCell -> R.layout.cell_toptweet
+        null -> throw UnsupportedOperationException("Unknown view")
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType == R.layout.cell_tweet) {
+            val view = LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.cell_tweet, parent, false)
+            return TweetViewHolder(view)
+        } else {
+            val view = LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.cell_toptweet, parent, false)
+            return TopTweetViewHolder(view)
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         getItem(position)?.let {
-            holder.bind(context, it, onClickListener(it))
+            when (it) {
+                is FeedCell.TweetCell -> (holder as TweetViewHolder).bind(
+                    context,
+                    it.tweet,
+                    onClickListener(it.tweet)
+                )
+                is FeedCell.TopTweetCell -> (holder as TopTweetViewHolder).bind(it.text)
+            }
         }
     }
 

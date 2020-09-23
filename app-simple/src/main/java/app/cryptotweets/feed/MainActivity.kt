@@ -1,4 +1,4 @@
-package app.cryptotweets
+package app.cryptotweets.feed
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import app.cryptotweets.R
 
 class MainActivity : AppCompatActivity() {
 

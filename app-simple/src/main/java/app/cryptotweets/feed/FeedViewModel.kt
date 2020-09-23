@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import app.cryptotweets.feed.models.Tweet
+import androidx.paging.insertSeparators
+import androidx.paging.map
+import app.cryptotweets.feed.adapter.FeedCell
 import app.cryptotweets.feed.network.FeedRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,11 +21,23 @@ class FeedViewModel : ViewModel() {
     private val repository = FeedRepository()
 
     val feed get() = _feed.filterNotNull()
-    private val _feed: MutableStateFlow<PagingData<Tweet>> = MutableStateFlow(PagingData.empty())
+    private val _feed: MutableStateFlow<PagingData<FeedCell>> = MutableStateFlow(PagingData.empty())
 
     init {
-        repository.initFeed().cachedIn(viewModelScope).onEach {
-            _feed.value = it
+        repository.initFeed().cachedIn(viewModelScope).onEach { pagingData ->
+            val feed = pagingData.map {
+                FeedCell.TweetCell(it)
+            }.insertSeparators { before, after ->
+                if (before == null) return@insertSeparators null // Beginning of the list
+                else if (after == null) return@insertSeparators null // End of the list
+                else {
+                    val favorites = before.tweet.favorite_count
+                    if (favorites > 10)
+                        FeedCell.TopTweetCell("This is a top tweet with ${favorites} ❤️s.")
+                    else return@insertSeparators null
+                }
+            }
+            _feed.value = feed
         }.launchIn(viewModelScope)
     }
 }
