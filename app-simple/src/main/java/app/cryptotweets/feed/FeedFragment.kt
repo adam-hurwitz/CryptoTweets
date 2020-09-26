@@ -36,7 +36,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     }
 
     private fun initAdapter() {
-        adapter = FeedAdapter(requireContext())
+        adapter = FeedAdapter()
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
     }

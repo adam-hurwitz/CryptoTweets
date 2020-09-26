@@ -23,9 +23,7 @@ val DIFF_UTIL = object : DiffUtil.ItemCallback<Tweet>() {
     override fun areContentsTheSame(oldItem: Tweet, newItem: Tweet) = oldItem == newItem
 }
 
-class FeedAdapter(
-    val context: Context
-) : PagingDataAdapter<Tweet, FeedAdapter.ViewHolder>(DIFF_UTIL) {
+class FeedAdapter : PagingDataAdapter<Tweet, FeedAdapter.ViewHolder>(DIFF_UTIL) {
 
     class ViewHolder(private val binding: TweetCellBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -64,8 +62,8 @@ class FeedAdapter(
                 )
                 val webpage: Uri = Uri.parse(url)
                 val intent = Intent(Intent.ACTION_VIEW, webpage)
-                if (intent.resolveActivity(context.packageManager) != null)
-                    startActivity(context, intent, null)
+                if (intent.resolveActivity(view.context.packageManager) != null)
+                    startActivity(view.context, intent, null)
             }
         }
     }

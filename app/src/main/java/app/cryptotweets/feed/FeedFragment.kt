@@ -61,7 +61,7 @@ class FeedFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        adapter = FeedAdapter(requireContext())
+        adapter = FeedAdapter()
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.adapter = adapter
     }

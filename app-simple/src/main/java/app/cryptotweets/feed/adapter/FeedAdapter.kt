@@ -1,6 +1,5 @@
 package app.cryptotweets.feed.adapter
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -26,9 +25,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
 
-class FeedAdapter(
-    private val context: Context
-) : PagingDataAdapter<FeedCell, RecyclerView.ViewHolder>(DIFF_UTIL) {
+class FeedAdapter : PagingDataAdapter<FeedCell, RecyclerView.ViewHolder>(DIFF_UTIL) {
 
     companion object {
         private val DIFF_UTIL = object : DiffUtil.ItemCallback<FeedCell>() {
@@ -51,7 +48,7 @@ class FeedAdapter(
         val mediaImage = view.findViewById<ImageView>(R.id.mediaImage)
         val timestamp = view.findViewById<TextView>(R.id.timestamp)
 
-        fun bind(context: Context, tweet: Tweet, onClickListener: View.OnClickListener) {
+        fun bind(tweet: Tweet, onClickListener: View.OnClickListener) {
             tweetCard.setOnClickListener(onClickListener)
             userImage.load(tweet.user.profile_image_url_https) {
                 crossfade(true)
@@ -61,7 +58,10 @@ class FeedAdapter(
             }
             userImage.setOnClickListener(onClickListener)
             screenName.text =
-                String.format(context.getString(R.string.screen_name_at), tweet.user.screen_name)
+                String.format(
+                    screenName.context.getString(R.string.screen_name_at),
+                    tweet.user.screen_name
+                )
             screenName.setOnClickListener(onClickListener)
             tweetText.text = tweet.text
             tweetText.setOnClickListener(onClickListener)
@@ -81,9 +81,9 @@ class FeedAdapter(
     class TopTweetViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val topTweetTextView = view.findViewById<TextView>(R.id.topTweetText)
 
-        fun bind(context: Context, topTweetCell: FeedCell.TopTweetCell) {
+        fun bind(topTweetCell: FeedCell.TopTweetCell) {
             topTweetTextView.text = String.format(
-                context.getString(R.string.top_tweet_text),
+                topTweetTextView.context.getString(R.string.top_tweet_text),
                 topTweetCell.favoriteCount
             )
         }
@@ -113,11 +113,10 @@ class FeedAdapter(
         getItem(position)?.let {
             when (it) {
                 is FeedCell.TweetCell -> (holder as TweetViewHolder).bind(
-                    context,
                     it.tweet,
                     onClickListener(it.tweet)
                 )
-                is FeedCell.TopTweetCell -> (holder as TopTweetViewHolder).bind(context, it)
+                is FeedCell.TopTweetCell -> (holder as TopTweetViewHolder).bind(it)
             }
         }
     }
@@ -139,8 +138,8 @@ class FeedAdapter(
                 )
                 val webpage: Uri = Uri.parse(url)
                 val intent = Intent(Intent.ACTION_VIEW, webpage)
-                if (intent.resolveActivity(context.packageManager) != null)
-                    startActivity(context, intent, null)
+                if (intent.resolveActivity(view.context.packageManager) != null)
+                    startActivity(view.context, intent, null)
             }
         }
     }
