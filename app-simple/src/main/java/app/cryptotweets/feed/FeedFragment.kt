@@ -42,8 +42,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     }
 
     private fun initViewStates() {
-        viewModel.feed.onEach { pagedList ->
-            adapter.submitData(pagedList)
+        viewModel.feed.onEach { pagingData ->
+            adapter.submitData(pagingData)
         }.launchIn(lifecycleScope)
         adapter.addLoadStateListener { loadState ->
             progressBar.isVisible = loadState.source.refresh is LoadState.Loading
