@@ -35,7 +35,10 @@ android {
     // target 1.8 into bytecode that is being built with JVM target 1.6. Please specify proper
     // '-jvm-target' option"
     // See: https://stackoverflow.com/a/57969464/2253682
-    kotlinOptions { jvmTarget = '1.8' }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+    }
 
     buildFeatures.dataBinding = true
 

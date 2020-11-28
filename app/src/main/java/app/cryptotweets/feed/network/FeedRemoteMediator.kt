@@ -14,7 +14,6 @@ import app.cryptotweets.utils.FEED_LIST_TYPE
 import app.cryptotweets.utils.PAGE_DEFAULT
 import retrofit2.HttpException
 import java.io.IOException
-import java.io.InvalidObjectException
 
 @OptIn(ExperimentalPagingApi::class)
 class FeedRemoteMediator(
@@ -34,7 +33,7 @@ class FeedRemoteMediator(
                 val remoteKeys = getRemoteKeyForLastItem(state)
                 if (remoteKeys == null) PAGE_DEFAULT
                 else if (remoteKeys.nextKey == null)
-                    throw InvalidObjectException("Remote key should not be null for $loadType")
+                    return MediatorResult.Success(endOfPaginationReached = true)
                 else remoteKeys.nextKey
             }
         }
@@ -49,7 +48,7 @@ class FeedRemoteMediator(
 
             val endOfPaginationReached = tweets.isEmpty()
             database.withTransaction {
-                // clear all tables in the database
+                // Clear all tables in the database
                 if (loadType == LoadType.REFRESH) {
                     database.remoteKeysDao().clearRemoteKeys()
                     database.feedDao().clearTweets()
