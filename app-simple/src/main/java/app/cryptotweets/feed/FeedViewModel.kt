@@ -23,7 +23,7 @@ class FeedViewModel : ViewModel() {
     private val repository = FeedRepository()
 
     val feed get() = _feed.filterNotNull()
-    private val _feed: MutableStateFlow<PagingData<FeedCell>> = MutableStateFlow(PagingData.empty())
+    private val _feed = MutableStateFlow<PagingData<FeedCell>>(PagingData.empty())
 
     init {
         repository.initFeed().cachedIn(viewModelScope).onEach { pagingData ->
