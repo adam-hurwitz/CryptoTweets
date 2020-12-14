@@ -5,15 +5,14 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import app.cryptotweets.R
+import app.cryptotweets.databinding.CellToptweetBinding
+import app.cryptotweets.databinding.CellTweetBinding
 import app.cryptotweets.feed.FeedFragmentDirections
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.utils.MEDIA_RADIUS_INT
@@ -40,50 +39,45 @@ class FeedAdapter : PagingDataAdapter<FeedCell, RecyclerView.ViewHolder>(DIFF_UT
         }
     }
 
-    class TweetViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tweetCard = view.findViewById<ConstraintLayout>(R.id.tweetCard)
-        val userImage = view.findViewById<ImageView>(R.id.userImage)
-        val screenName = view.findViewById<TextView>(R.id.screenName)
-        val tweetText = view.findViewById<TextView>(R.id.tweetText)
-        val mediaImage = view.findViewById<ImageView>(R.id.mediaImage)
-        val timestamp = view.findViewById<TextView>(R.id.timestamp)
+    class TweetViewHolder(private val binding: CellTweetBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(tweet: Tweet, onClickListener: View.OnClickListener) {
-            tweetCard.setOnClickListener(onClickListener)
-            userImage.load(tweet.user.profile_image_url_https) {
+            binding.tweetCard.setOnClickListener(onClickListener)
+            binding.userImage.load(tweet.user.profile_image_url_https) {
                 crossfade(true)
                 placeholder(R.drawable.placeholder)
                 transformations(CircleCropTransformation())
                 error(R.drawable.ic_user_24)
             }
-            userImage.setOnClickListener(onClickListener)
-            screenName.text =
+            binding.userImage.setOnClickListener(onClickListener)
+            binding.screenName.text =
                 String.format(
-                    screenName.context.getString(R.string.screen_name_at),
+                    binding.screenName.context.getString(R.string.screen_name_at),
                     tweet.user.screen_name
                 )
-            screenName.setOnClickListener(onClickListener)
-            tweetText.text = tweet.text
-            tweetText.setOnClickListener(onClickListener)
-            mediaImage.visibility =
+            binding.screenName.setOnClickListener(onClickListener)
+            binding.tweetText.text = tweet.text
+            binding.tweetText.setOnClickListener(onClickListener)
+            binding.mediaImage.visibility =
                 if (tweet.entities.media?.get(0)?.media_url_https != null) View.VISIBLE
                 else View.GONE
-            mediaImage.load(tweet.entities.media?.get(0)?.media_url_https) {
+            binding.mediaImage.load(tweet.entities.media?.get(0)?.media_url_https) {
                 crossfade(true)
                 placeholder(R.drawable.placeholder)
                 transformations(RoundedCornersTransformation(MEDIA_RADIUS_INT))
                 error(R.drawable.ic_media_24)
             }
-            timestamp.setTimestamp(tweet.created_at)
+            binding.timestamp.setTimestamp(tweet.created_at)
         }
     }
 
-    class TopTweetViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val topTweetTextView = view.findViewById<TextView>(R.id.topTweetText)
-
+    class TopTweetViewHolder(
+        private val binding: CellToptweetBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(topTweetCell: FeedCell.TopTweetCell) {
-            topTweetTextView.text = String.format(
-                topTweetTextView.context.getString(R.string.top_tweet_text),
+            binding.topTweetText.text = String.format(
+                binding.topTweetText.context.getString(R.string.top_tweet_text),
                 topTweetCell.favoriteCount
             )
         }
@@ -97,15 +91,11 @@ class FeedAdapter : PagingDataAdapter<FeedCell, RecyclerView.ViewHolder>(DIFF_UT
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         if (viewType == R.layout.cell_tweet) {
-            val view = LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.cell_tweet, parent, false)
-            return TweetViewHolder(view)
+            val inflater = LayoutInflater.from(parent.context)
+            return TweetViewHolder(CellTweetBinding.inflate(inflater, parent, false))
         } else {
-            val view = LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.cell_toptweet, parent, false)
-            return TopTweetViewHolder(view)
+            val inflater = LayoutInflater.from(parent.context)
+            return TopTweetViewHolder(CellToptweetBinding.inflate(inflater, parent, false))
         }
     }
 

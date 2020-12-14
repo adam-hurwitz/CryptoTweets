@@ -10,7 +10,7 @@ import app.cryptotweets.databinding.FragmentProfileBinding
 
 class ProfileFragment : Fragment() {
 
-    val args: ProfileFragmentArgs by navArgs()
+    private val args: ProfileFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

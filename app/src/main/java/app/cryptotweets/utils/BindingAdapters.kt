@@ -8,7 +8,7 @@ import app.cryptotweets.R
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import kotlinx.android.synthetic.main.tweet_cell.view.*
+import kotlinx.android.synthetic.main.cell_tweet.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 

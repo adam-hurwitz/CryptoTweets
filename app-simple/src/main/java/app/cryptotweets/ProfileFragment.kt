@@ -9,9 +9,10 @@ import app.cryptotweets.feed.ProfileFragmentArgs
 import coil.load
 import coil.transform.CircleCropTransformation
 
+
 class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
-    val args: ProfileFragmentArgs by navArgs()
+    private val args: ProfileFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
