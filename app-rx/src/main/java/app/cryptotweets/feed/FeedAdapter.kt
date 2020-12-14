@@ -11,7 +11,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import app.cryptotweets.R
-import app.cryptotweets.databinding.TweetCellBinding
+import app.cryptotweets.databinding.CellTweetBinding
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.utils.TWEET_BASE_URL
 import app.cryptotweets.utils.TWEET_PATH_STATUS_URL
@@ -24,7 +24,7 @@ val DIFF_UTIL = object : DiffUtil.ItemCallback<Tweet>() {
 
 class FeedAdapter : PagedListAdapter<Tweet, FeedAdapter.ViewHolder>(DIFF_UTIL) {
 
-    class ViewHolder(private val binding: TweetCellBinding) :
+    class ViewHolder(private val binding: CellTweetBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(tweet: Tweet, onClickListener: View.OnClickListener) {
             binding.tweet = tweet
@@ -35,7 +35,7 @@ class FeedAdapter : PagedListAdapter<Tweet, FeedAdapter.ViewHolder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(TweetCellBinding.inflate(inflater, parent, false))
+        return ViewHolder(CellTweetBinding.inflate(inflater, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
