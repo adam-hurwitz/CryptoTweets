@@ -6,11 +6,15 @@ import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.cryptotweets.App
 import app.cryptotweets.R
 import app.cryptotweets.feed.network.FeedRepository
@@ -19,10 +23,6 @@ import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_feed.feed
-import kotlinx.android.synthetic.main.fragment_feed.progressBar
-import kotlinx.android.synthetic.main.fragment_feed.recyclerView
-import kotlinx.android.synthetic.main.fragment_feed.swipeToRefresh
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
@@ -49,11 +49,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val coordinatorLayout = view.findViewById<CoordinatorLayout>(R.id.feed)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
+        val swipeToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
         viewModel.launchViewEvents(this)
-        initAdapter()
+        initAdapter(recyclerView)
         initViewStates()
-        initViewEffects()
-        initSwipeToRefresh()
+        initViewEffects(coordinatorLayout, progressBar, swipeToRefresh)
+        initSwipeToRefresh(swipeToRefresh)
     }
 
     @ExperimentalCoroutinesApi
@@ -68,8 +72,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         this.viewEvent = viewEvent
     }
 
-    private fun initAdapter() {
-        adapter = FeedAdapter()
+    private fun initAdapter(recyclerView: RecyclerView) {
+        adapter = FeedAdapter(requireContext())
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = adapter
     }
@@ -85,7 +89,11 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     }
 
     @ExperimentalCoroutinesApi
-    private fun initViewEffects() {
+    private fun initViewEffects(
+        coordinatorLayout: CoordinatorLayout,
+        progressBar: ProgressBar,
+        swipeToRefresh: SwipeRefreshLayout
+    ) {
         val isLoadingDisposable = viewModel.viewEffect.isLoading
             .doOnError { Log.v(LOG_TAG, "Error loading isLoading") }
             .subscribe { isLoading ->
@@ -100,12 +108,18 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             .doOnError { Log.v(LOG_TAG, "Error loading isError") }
             .subscribe { isError ->
                 if (isError.getContentIfNotHandled() == true) {
-                    val snackbar =
-                            Snackbar.make(feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
+                    val snackbar = Snackbar.make(
+                        coordinatorLayout, R.string.feed_error_message, Snackbar.LENGTH_LONG
+                    )
                     snackbar.setAction(R.string.feed_error_retry, onRretryListener())
                     val textView =
-                            snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-                    textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
+                        snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+                    textView.setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.colorAccent
+                        )
+                    )
                     snackbar.show()
                 }
             }
@@ -116,7 +130,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         viewEvent.retryEvent()
     }
 
-    private fun initSwipeToRefresh() {
+    private fun initSwipeToRefresh(swipeToRefresh: SwipeRefreshLayout) {
         swipeToRefresh.setColorSchemeResources(R.color.colorAccent)
         swipeToRefresh.setOnRefreshListener {
             viewEvent.swipeToRefreshEvent()

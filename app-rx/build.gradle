@@ -33,8 +33,6 @@ android {
     // Retrofit support: 'Invoke-customs are only supported starting with Android O (--min-api 26)'
     compileOptions { targetCompatibility JavaVersion.VERSION_1_8 }
 
-    dataBinding.enabled = true
-
 }
 
 dependencies {
@@ -57,8 +55,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_alpha_version"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
     implementation "androidx.paging:paging-rxjava2-ktx:$paging_version"
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    implementation "io.coil-kt:coil:0.13.0"
     implementation "io.reactivex.rxjava3:rxkotlin:$rx_version"
     implementation "io.reactivex.rxjava3:rxandroid:$rx_version"
     implementation "com.squareup.retrofit2:adapter-rxjava3:$retrofit_version"
