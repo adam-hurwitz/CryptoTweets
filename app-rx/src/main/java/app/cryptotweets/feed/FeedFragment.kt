@@ -26,8 +26,9 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class FeedFragment : Fragment(R.layout.fragment_feed) {
-    val LOG_TAG = FeedFragment::class.java.simpleName
+    private val LOG_TAG = FeedFragment::class.java.simpleName
 
     @Inject
     lateinit var repository: FeedRepository
@@ -36,7 +37,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     private val compositeDisposable = CompositeDisposable()
 
-    @ExperimentalCoroutinesApi
     private val viewModel: FeedViewModel by viewModels {
         FeedViewModelFactory(owner = this, feedRepository = repository)
     }
@@ -46,7 +46,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         (context.applicationContext as App).component.inject(this)
     }
 
-    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val coordinatorLayout = view.findViewById<CoordinatorLayout>(R.id.feed)
@@ -60,7 +59,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         initSwipeToRefresh(swipeToRefresh)
     }
 
-    @ExperimentalCoroutinesApi
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
@@ -78,7 +76,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         recyclerView.adapter = adapter
     }
 
-    @ExperimentalCoroutinesApi
     private fun initViewStates() {
         val disposable = viewModel.viewState.feed
             .doOnError { Log.v(LOG_TAG, "Error loading pagedList") }
@@ -88,7 +85,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         compositeDisposable.add(disposable)
     }
 
-    @ExperimentalCoroutinesApi
     private fun initViewEffects(
         coordinatorLayout: CoordinatorLayout,
         progressBar: ProgressBar,
@@ -138,4 +134,3 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     }
 
 }
-

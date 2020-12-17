@@ -11,15 +11,15 @@
         android:label="@string/app_name"
         tools:layout="@layout/fragment_feed">
         <action
-            android:id="@+id/action_feedFragment_to_tweetDetailFragment"
-            app:destination="@id/tweetDetailFragment"
+            android:id="@+id/action_feedFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
-        android:id="@+id/tweetDetailFragment"
+        android:id="@+id/profileFragment"
         android:name="app.cryptotweets.feed.ProfileFragment"
         android:label="{label}"
         tools:layout="@layout/fragment_profile">

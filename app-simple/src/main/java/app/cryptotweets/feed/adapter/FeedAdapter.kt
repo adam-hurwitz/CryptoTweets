@@ -113,7 +113,7 @@ class FeedAdapter : PagingDataAdapter<FeedCell, RecyclerView.ViewHolder>(DIFF_UT
 
     private fun onClickListener(tweet: Tweet) = View.OnClickListener { view ->
         val userAction =
-            FeedFragmentDirections.actionFeedFragmentToTweetDetailFragment(
+            FeedFragmentDirections.actionFeedFragmentToProfileFragment(
                 label = tweet.user.screen_name,
                 user = tweet.user
             )
