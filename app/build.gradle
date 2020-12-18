@@ -40,6 +40,8 @@ android {
         freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
     }
 
+    buildFeatures.viewBinding = true
+
 }
 
 dependencies {

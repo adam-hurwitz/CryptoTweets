@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.cryptotweets.R
 import app.cryptotweets.databinding.FragmentFeedBinding
 import app.cryptotweets.feed.adapter.FeedAdapter
@@ -28,17 +30,12 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentFeedBinding.bind(view)
-        initAdapter(binding)
         initViewStates(binding)
     }
 
-    private fun initAdapter(binding: FragmentFeedBinding) {
-        adapter = FeedAdapter()
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = adapter
-    }
-
     private fun initViewStates(binding: FragmentFeedBinding) {
+        initAdapter(binding.recyclerView)
+        initSwipeToRefresh(binding.swipeToRefresh)
         viewModel.feed.onEach { pagingData ->
             adapter.submitData(pagingData)
         }.launchIn(lifecycleScope)
@@ -47,8 +44,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             binding.swipeToRefresh.isRefreshing = loadState.source.append is LoadState.Loading
             binding.recyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
             (loadState.source.refresh as? LoadState.Error)?.let {
-                val snackbar =
-                    Snackbar.make(binding.feed, R.string.feed_error_message, Snackbar.LENGTH_LONG)
+                val snackbar = Snackbar.make(
+                    binding.coordinatorLayout, R.string.feed_error_message, Snackbar.LENGTH_LONG
+                )
                 snackbar.setAction(R.string.feed_error_retry, onRetryListener())
                 val textView =
                     snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
@@ -56,8 +54,17 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 snackbar.show()
             }
         }
-        binding.swipeToRefresh.setColorSchemeResources(R.color.colorAccent)
-        binding.swipeToRefresh.setOnRefreshListener { adapter.refresh() }
+    }
+
+    private fun initAdapter(recyclerView: RecyclerView) {
+        adapter = FeedAdapter()
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+    }
+
+    private fun initSwipeToRefresh(swipeToRefresh: SwipeRefreshLayout) {
+        swipeToRefresh.setColorSchemeResources(R.color.colorAccent)
+        swipeToRefresh.setOnRefreshListener { adapter.refresh() }
     }
 
     private fun onRetryListener() = OnClickListener {

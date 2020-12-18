@@ -25,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
+import app.cryptotweets.databinding.FragmentFeedBinding
 
 @ExperimentalCoroutinesApi
 class FeedFragment : Fragment(R.layout.fragment_feed) {
@@ -48,15 +49,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val coordinatorLayout = view.findViewById<CoordinatorLayout>(R.id.feed)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-        val swipeToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
+        val binding = FragmentFeedBinding.bind(view)
         viewModel.launchViewEvents(this)
-        initAdapter(recyclerView)
-        initViewStates()
-        initViewEffects(coordinatorLayout, progressBar, swipeToRefresh)
-        initSwipeToRefresh(swipeToRefresh)
+        initViewStates(binding)
     }
 
     override fun onDestroy() {
@@ -70,19 +65,22 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         this.viewEvent = viewEvent
     }
 
-    private fun initAdapter(recyclerView: RecyclerView) {
-        adapter = FeedAdapter(requireContext())
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter
-    }
-
-    private fun initViewStates() {
+    private fun initViewStates(binding: FragmentFeedBinding) {
+        initAdapter(binding.recyclerView)
+        initViewEffects(binding.coordinatorLayout, binding.progressBar, binding.swipeToRefresh)
+        initSwipeToRefresh(binding.swipeToRefresh)
         val disposable = viewModel.viewState.feed
             .doOnError { Log.v(LOG_TAG, "Error loading pagedList") }
             .subscribe { pagedList ->
                 adapter.submitList(pagedList)
             }
         compositeDisposable.add(disposable)
+    }
+
+    private fun initAdapter(recyclerView: RecyclerView) {
+        adapter = FeedAdapter(requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
     }
 
     private fun initViewEffects(
@@ -122,15 +120,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         compositeDisposable.addAll(isLoadingDisposable, isErrorDisposable)
     }
 
-    private fun onRretryListener() = View.OnClickListener {
-        viewEvent.retryEvent()
-    }
-
     private fun initSwipeToRefresh(swipeToRefresh: SwipeRefreshLayout) {
         swipeToRefresh.setColorSchemeResources(R.color.colorAccent)
         swipeToRefresh.setOnRefreshListener {
             viewEvent.swipeToRefreshEvent()
         }
+    }
+
+    private fun onRretryListener() = View.OnClickListener {
+        viewEvent.retryEvent()
     }
 
 }

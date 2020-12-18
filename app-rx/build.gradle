@@ -33,6 +33,8 @@ android {
     // Retrofit support: 'Invoke-customs are only supported starting with Android O (--min-api 26)'
     compileOptions { targetCompatibility JavaVersion.VERSION_1_8 }
 
+    buildFeatures.viewBinding = true
+
 }
 
 dependencies {

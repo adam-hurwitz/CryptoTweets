@@ -6,9 +6,6 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.findNavController
 import androidx.paging.PagedListAdapter
@@ -24,6 +21,7 @@ import app.cryptotweets.utils.setTimestamp
 import coil.load
 import coil.transform.CircleCropTransformation
 import coil.transform.RoundedCornersTransformation
+import app.cryptotweets.databinding.CellTweetBinding
 
 class FeedAdapter(
     private val context: Context
@@ -36,41 +34,35 @@ class FeedAdapter(
         }
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tweetCardView = view.findViewById<ConstraintLayout>(R.id.tweetCard)
-        val userImageView = view.findViewById<ImageView>(R.id.userImage)
-        val tweetTextView = view.findViewById<TextView>(R.id.tweetText)
-        val screenNameView = view.findViewById<TextView>(R.id.screenName)
-        val mediaImageView = view.findViewById<ImageView>(R.id.mediaImage)
-        val timestampView = view.findViewById<TextView>(R.id.timestamp)
+    inner class ViewHolder(
+        private val binding: CellTweetBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(tweet: Tweet, onClickListener: View.OnClickListener) {
-            tweetCardView.setOnClickListener(onClickListener)
-            userImageView.load(tweet.user.profile_image_url_https) {
+            binding.tweetCard.setOnClickListener(onClickListener)
+            binding.userImage.load(tweet.user.profile_image_url_https) {
                 transformations(CircleCropTransformation())
             }
-            userImageView.setOnClickListener(onClickListener)
-            tweetTextView.text = tweet.text
-            tweetTextView.setOnClickListener(onClickListener)
-            screenNameView.text = String.format(
+            binding.userImage.setOnClickListener(onClickListener)
+            binding.tweetText.text = tweet.text
+            binding.tweetText.setOnClickListener(onClickListener)
+            binding.screenName.text = String.format(
                 context.getString(R.string.screen_name_at), tweet.user.screen_name
             )
-            screenNameView.setOnClickListener(onClickListener)
+            binding.screenName.setOnClickListener(onClickListener)
             if (tweet.entities.media != null) {
-                mediaImageView.visibility = View.VISIBLE
-                mediaImageView.load(tweet.entities.media.get(0).media_url_https) {
+                binding.mediaImage.visibility = View.VISIBLE
+                binding.mediaImage.load(tweet.entities.media.get(0).media_url_https) {
                     transformations(RoundedCornersTransformation(MEDIA_RADIUS_INT))
                 }
-                mediaImageView.setOnClickListener(onClickListener)
-            } else mediaImageView.visibility = View.GONE
-            timestampView.setTimestamp(tweet.created_at)
+                binding.mediaImage.setOnClickListener(onClickListener)
+            } else binding.mediaImage.visibility = View.GONE
+            binding.timestamp.setTimestamp(tweet.created_at)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.cell_tweet, parent, false)
-        return ViewHolder(view)
+        val inflater = LayoutInflater.from(parent.context)
+        return ViewHolder(CellTweetBinding.inflate(inflater, parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

@@ -4,9 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
-import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -26,14 +24,16 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
+import app.cryptotweets.databinding.FragmentFeedBinding
+import kotlinx.android.synthetic.main.fragment_feed.view.coordinatorLayout
 
+@ExperimentalCoroutinesApi
 class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     @Inject
     lateinit var repository: FeedRepository
     lateinit var adapter: FeedAdapter
 
-    @ExperimentalCoroutinesApi
     private val viewModel: FeedViewModel by viewModels {
         FeedViewModelFactory(owner = this, feedRepository = repository)
     }
@@ -43,42 +43,27 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         (context.applicationContext as App).component.inject(this)
     }
 
-    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val coordinatorLayout = view.findViewById<CoordinatorLayout>(R.id.feed)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
-        val progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
-        val swipeToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.swipeToRefresh)
-        initAdapter(recyclerView)
-        initViewStates(coordinatorLayout, progressBar, swipeToRefresh)
-        initSwipeToRefresh(swipeToRefresh)
+        val binding = FragmentFeedBinding.bind(view)
+        initViewStates(binding)
     }
 
-    private fun initAdapter(recyclerView: RecyclerView) {
-        adapter = FeedAdapter(requireContext())
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter
-    }
-
-    @ExperimentalCoroutinesApi
-    private fun initViewStates(
-        coordinatorLayout: CoordinatorLayout,
-        progressBar: ProgressBar,
-        swipeToRefresh: SwipeRefreshLayout
-    ) {
+    private fun initViewStates(binding: FragmentFeedBinding) {
+        initAdapter(binding.recyclerView)
+        initSwipeToRefresh(binding.swipeToRefresh)
         viewModel.viewState.feed.onEach { pagedList ->
             adapter.submitData(pagedList)
         }.launchIn(lifecycleScope)
         adapter.addLoadStateListener { loadState ->
-            progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-            swipeToRefresh.isRefreshing =
+            binding.progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+            binding.swipeToRefresh.isRefreshing =
                 loadState.source.append is LoadState.Loading
                         && loadState.source.refresh is LoadState.Loading
             val errorState = loadState.source.refresh as? LoadState.Error
             errorState?.let {
                 val snackbar = Snackbar.make(
-                    coordinatorLayout,
+                    binding.coordinatorLayout,
                     R.string.feed_error_message,
                     Snackbar.LENGTH_LONG
                 )
@@ -91,13 +76,19 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         }
     }
 
-    private fun onRetryListener() = OnClickListener {
-        adapter.retry()
+    private fun initAdapter(recyclerView: RecyclerView) {
+        adapter = FeedAdapter(requireContext())
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
     }
 
     private fun initSwipeToRefresh(swipeToRefresh: SwipeRefreshLayout) {
         swipeToRefresh.setColorSchemeResources(R.color.colorAccent)
         swipeToRefresh.setOnRefreshListener { adapter.refresh() }
+    }
+
+    private fun onRetryListener() = OnClickListener {
+        adapter.retry()
     }
 
 }
