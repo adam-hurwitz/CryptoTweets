@@ -17,11 +17,9 @@ import app.cryptotweets.R
 import app.cryptotweets.databinding.FragmentFeedBinding
 import app.cryptotweets.feed.adapter.FeedAdapter
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@ExperimentalCoroutinesApi
 class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     private val viewModel: FeedViewModel by viewModels()

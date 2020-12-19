@@ -4,11 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import app.cryptotweets.feed.network.FeedRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@ExperimentalCoroutinesApi
 class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel() {
     val LOG_TAG = FeedViewModel::class.java.simpleName
 

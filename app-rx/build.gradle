@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-kapt'
 }
@@ -57,7 +56,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_alpha_version"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
     implementation "androidx.paging:paging-rxjava2-ktx:$paging_version"
-    implementation "io.coil-kt:coil:0.13.0"
+    implementation "io.coil-kt:coil:$coil_version"
     implementation "io.reactivex.rxjava3:rxkotlin:$rx_version"
     implementation "io.reactivex.rxjava3:rxandroid:$rx_version"
     implementation "com.squareup.retrofit2:adapter-rxjava3:$retrofit_version"

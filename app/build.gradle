@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-kapt'
 }
@@ -35,10 +34,7 @@ android {
     // target 1.8 into bytecode that is being built with JVM target 1.6. Please specify proper
     // '-jvm-target' option"
     // See: https://stackoverflow.com/a/57969464/2253682
-    kotlinOptions {
-        jvmTarget = '1.8'
-        freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
-    }
+    kotlinOptions.jvmTarget = '1.8'
 
     buildFeatures.viewBinding = true
 
@@ -63,7 +59,7 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_alpha_version"
     kapt "androidx.room:room-compiler:$room_alpha_version"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version_alpha"
-    implementation "io.coil-kt:coil:0.13.0"
+    implementation "io.coil-kt:coil:$coil_version"
 
     testImplementation "junit:junit:$junit"
     testImplementation "androidx.room:room-testing:$room_version"

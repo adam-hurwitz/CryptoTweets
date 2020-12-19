@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,18 +15,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.cryptotweets.App
 import app.cryptotweets.R
+import app.cryptotweets.databinding.FragmentFeedBinding
 import app.cryptotweets.feed.network.FeedRepository
 import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import androidx.core.view.isVisible
 import javax.inject.Inject
-import app.cryptotweets.databinding.FragmentFeedBinding
-import kotlinx.android.synthetic.main.fragment_feed.view.coordinatorLayout
 
-@ExperimentalCoroutinesApi
 class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     @Inject

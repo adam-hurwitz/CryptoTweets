@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-kapt'
 }
@@ -35,14 +34,14 @@ android {
     // target 1.8 into bytecode that is being built with JVM target 1.6. Please specify proper
     // '-jvm-target' option"
     // See: https://stackoverflow.com/a/57969464/2253682
-    kotlinOptions { jvmTarget = '1.8' }
+    kotlinOptions.jvmTarget = '1.8'
 
     buildFeatures.viewBinding = true
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.21"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'

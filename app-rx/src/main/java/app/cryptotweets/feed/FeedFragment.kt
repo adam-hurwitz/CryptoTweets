@@ -17,17 +17,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import app.cryptotweets.App
 import app.cryptotweets.R
+import app.cryptotweets.databinding.FragmentFeedBinding
 import app.cryptotweets.feed.network.FeedRepository
 import app.cryptotweets.feed.viewmodel.FeedViewEvent
 import app.cryptotweets.feed.viewmodel.FeedViewModel
 import app.cryptotweets.feed.viewmodel.FeedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
-import app.cryptotweets.databinding.FragmentFeedBinding
 
-@ExperimentalCoroutinesApi
 class FeedFragment : Fragment(R.layout.fragment_feed) {
     private val LOG_TAG = FeedFragment::class.java.simpleName
 

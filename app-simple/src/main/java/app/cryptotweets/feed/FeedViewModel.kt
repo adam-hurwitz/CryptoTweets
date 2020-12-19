@@ -10,13 +10,11 @@ import app.cryptotweets.R
 import app.cryptotweets.feed.adapter.FeedCell
 import app.cryptotweets.feed.network.FeedRepository
 import app.cryptotweets.utils.TOP_TWEETS_FAVORITE_THRESHOLD
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-@ExperimentalCoroutinesApi
 class FeedViewModel : ViewModel() {
     val LOG_TAG = FeedViewModel::class.java.simpleName
 

@@ -13,9 +13,7 @@ import app.cryptotweets.utils.Status.SUCCESS
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
 class FeedViewModel(private val feedRepository: FeedRepository) : ViewModel(), FeedViewEvent {
     val LOG_TAG = FeedViewModel::class.java.simpleName
 
