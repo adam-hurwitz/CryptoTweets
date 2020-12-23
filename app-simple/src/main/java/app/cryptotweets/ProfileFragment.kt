@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import app.cryptotweets.databinding.FragmentProfileBinding
-import app.cryptotweets.feed.ProfileFragmentArgs
 import coil.load
 import coil.transform.CircleCropTransformation
 
