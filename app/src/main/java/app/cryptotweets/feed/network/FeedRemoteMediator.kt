@@ -11,7 +11,7 @@ import app.cryptotweets.utils.CryptoTweetsDatabase
 import app.cryptotweets.utils.FEED_LIST_ID
 import app.cryptotweets.utils.FEED_LIST_SIZE
 import app.cryptotweets.utils.FEED_LIST_TYPE
-import app.cryptotweets.utils.PAGE_DEFAULT
+import app.cryptotweets.utils.PAGE_DEFAULT_NUM
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -26,12 +26,12 @@ class FeedRemoteMediator(
         val page = when (loadType) {
             LoadType.REFRESH -> {
                 val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                remoteKeys?.nextKey?.minus(1) ?: PAGE_DEFAULT
+                remoteKeys?.nextKey?.minus(1) ?: PAGE_DEFAULT_NUM
             }
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
             LoadType.APPEND -> {
                 val remoteKeys = getRemoteKeyForLastItem(state)
-                if (remoteKeys == null) PAGE_DEFAULT
+                if (remoteKeys == null) PAGE_DEFAULT_NUM
                 else if (remoteKeys.nextKey == null)
                     return MediatorResult.Success(endOfPaginationReached = true)
                 else remoteKeys.nextKey
@@ -53,7 +53,7 @@ class FeedRemoteMediator(
                     database.remoteKeysDao().clearRemoteKeys()
                     database.feedDao().clearTweets()
                 }
-                val prevKey = if (page == PAGE_DEFAULT) null else page - 1
+                val prevKey = if (page == PAGE_DEFAULT_NUM) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val keys = tweets.map {
                     RemoteKeys(tweetId = it.id, prevKey = prevKey, nextKey = nextKey)

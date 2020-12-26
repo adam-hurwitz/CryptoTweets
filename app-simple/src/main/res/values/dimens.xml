@@ -27,9 +27,6 @@
     <dimen name="text_size_medium">20sp</dimen>
     <dimen name="text_size_title">22sp</dimen>
 
-    <!-- Feed -->
-    <dimen name="tweet_cell_elevation">8dp</dimen>
-
     <!-- Profile -->
     <item name="profile_user_image_guideline_percent" format="float" type="dimen">0.25</item>>
 

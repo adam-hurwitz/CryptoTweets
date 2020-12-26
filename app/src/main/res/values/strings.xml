@@ -9,6 +9,5 @@
     <string name="feed_error_retry">Retry!</string>
     <string name="user_profile_title">User profile title</string>
     <string name="user_profile_some_info">Some info about the user.</string>
-    <string name="user_image_dimen_ratio">1:1</string>
     <string name="media_image_dimen_ratio">2:1</string>
 </resources>

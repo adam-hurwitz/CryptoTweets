@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/margin_tiniest"
     android:layout_marginBottom="@dimen/margin_tiniest"
-    android:elevation="@dimen/tweet_cell_elevation">
+    android:elevation="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tweetCard"

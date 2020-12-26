@@ -29,6 +29,7 @@
 
     <!-- Feed -->
     <dimen name="tweet_cell_elevation">8dp</dimen>
+    <item name="user_image_dimen_ratio" format="string" type="dimen">1:1</item>
     <item name="tweet_card_guideline_percent" format="float" type="dimen">0.20</item>>
 
     <!-- Profile -->

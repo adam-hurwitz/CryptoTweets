@@ -7,11 +7,11 @@ import androidx.paging.toObservable
 import app.cryptotweets.feed.models.Tweet
 import app.cryptotweets.feed.room.FeedDao
 import app.cryptotweets.utils.FEED_LIST_ID
-import app.cryptotweets.utils.FEED_LIST_PAGE_NUM_DEFAULT
 import app.cryptotweets.utils.FEED_LIST_PAGE_NUM_KEY
 import app.cryptotweets.utils.FEED_LIST_SIZE
 import app.cryptotweets.utils.FEED_LIST_TYPE
 import app.cryptotweets.utils.FEED_PAGEDLIST_SIZE
+import app.cryptotweets.utils.PAGE_DEFAULT_NUM
 import app.cryptotweets.utils.Resource
 import app.cryptotweets.utils.Resource.Companion.error
 import app.cryptotweets.utils.Resource.Companion.loading
@@ -36,7 +36,7 @@ class FeedRepository @Inject constructor(
             Log.v(LOG_TAG, "initFeed ${Status.LOADING.name}")
             emit.onNext(loading(null))
             // Page number reset when new data request is made.
-            val page = FEED_LIST_PAGE_NUM_DEFAULT
+            val page = PAGE_DEFAULT_NUM
             getTweetsRequest(page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -57,7 +57,7 @@ class FeedRepository @Inject constructor(
     fun loadMoreFeed() = Observable.create<Resource<Nothing>> {
         val emit = it
         emit.onNext(loading(null))
-        var page = sharedPreferences.getInt(FEED_LIST_PAGE_NUM_KEY, FEED_LIST_PAGE_NUM_DEFAULT)
+        var page = sharedPreferences.getInt(FEED_LIST_PAGE_NUM_KEY, PAGE_DEFAULT_NUM)
         page++
         val tweetsResponse = getTweetsRequest(page)
         tweetsResponse
