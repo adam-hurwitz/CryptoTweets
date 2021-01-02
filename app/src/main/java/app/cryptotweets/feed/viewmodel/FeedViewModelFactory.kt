@@ -3,10 +3,12 @@ package app.cryptotweets.feed.viewmodel
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.paging.ExperimentalPagingApi
 import androidx.savedstate.SavedStateRegistryOwner
 import app.cryptotweets.feed.network.FeedRepository
 
-class FeedViewModelFactory(
+@ExperimentalPagingApi
+class FeedViewModelFactory constructor(
     owner: SavedStateRegistryOwner,
     private val feedRepository: FeedRepository
 ) : AbstractSavedStateViewModelFactory(owner, null) {

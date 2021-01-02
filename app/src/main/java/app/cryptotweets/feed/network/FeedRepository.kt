@@ -1,5 +1,6 @@
 package app.cryptotweets.feed.network
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import app.cryptotweets.utils.CryptoTweetsDatabase
@@ -8,6 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
+@ExperimentalPagingApi
 class FeedRepository @Inject constructor(
     private val database: CryptoTweetsDatabase,
     private val service: FeedService

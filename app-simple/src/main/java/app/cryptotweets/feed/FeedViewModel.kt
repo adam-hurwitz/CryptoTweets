@@ -18,13 +18,11 @@ import kotlinx.coroutines.flow.onEach
 class FeedViewModel : ViewModel() {
     val LOG_TAG = FeedViewModel::class.java.simpleName
 
-    private val repository = FeedRepository()
-
     val feed get() = _feed.filterNotNull()
     private val _feed = MutableStateFlow<PagingData<FeedCell>>(PagingData.empty())
 
     init {
-        repository.initFeed().cachedIn(viewModelScope).onEach { pagingData ->
+        FeedRepository().initFeed().cachedIn(viewModelScope).onEach { pagingData ->
             _feed.value = pagingData.map {
                 FeedCell.TweetCell(it)
             }.insertSeparators { before, after ->

@@ -16,7 +16,7 @@ object Injection {
         .build()
         .create(FeedService::class.java)
 
-    fun providesOkHttpClient() = OkHttpClient()
+    private fun providesOkHttpClient() = OkHttpClient()
         .newBuilder()
         .addInterceptor(object : Interceptor {
             override fun intercept(chain: Interceptor.Chain): Response {
