@@ -6,6 +6,6 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [UtilsModule::class])
-interface AppComponent {
+interface Component {
     fun inject(feedFragment: FeedFragment)
 }

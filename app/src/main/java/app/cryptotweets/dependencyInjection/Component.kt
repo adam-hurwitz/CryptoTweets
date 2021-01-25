@@ -8,6 +8,6 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [UtilsModule::class])
 @ExperimentalPagingApi
-interface AppComponent {
+interface Component {
     fun inject(feedFragment: FeedFragment)
 }
